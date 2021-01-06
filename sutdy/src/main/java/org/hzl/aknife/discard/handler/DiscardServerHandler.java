@@ -3,6 +3,7 @@ package org.hzl.aknife.discard.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.ReferenceCountUtil;
 
 /**
@@ -10,10 +11,11 @@ import io.netty.util.ReferenceCountUtil;
  * @date 2021.1.5
  * 处理服务端 channel
  */
-public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
+public class DiscardServerHandler extends SimpleChannelInboundHandler {
+
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
         ByteBuf in = (ByteBuf) msg;
         try {
             while (in.isReadable()) {
@@ -21,10 +23,9 @@ public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.flush();
             }
         } finally {
-            ReferenceCountUtil.release(msg);
+            ReferenceCountUtil.release(in);
         }
     }
-
 
 
     @Override

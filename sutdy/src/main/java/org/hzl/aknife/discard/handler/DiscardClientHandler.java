@@ -4,11 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
+import io.netty.channel.SimpleChannelInboundHandler;
+import org.hzl.aknife.discard.DiscardClient;
 
 import java.util.Scanner;
 
-public class DiscardClientHandler extends ChannelInboundHandlerAdapter {
+public class DiscardClientHandler extends SimpleChannelInboundHandler {
 
     private final ByteBuf firstMessage;
     Scanner input = new Scanner(System.in);
@@ -26,7 +27,7 @@ public class DiscardClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         ctx.write(msg);
     }
 
