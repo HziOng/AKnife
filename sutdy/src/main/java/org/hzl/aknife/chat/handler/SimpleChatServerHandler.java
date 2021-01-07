@@ -6,6 +6,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import lombok.extern.java.Log;
 
 /**
  * 服务端聊天室处理器
@@ -13,6 +14,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * @Author HeZiLong
  * @Data 2021/1/6 12:29
  */
+@Log
 public class SimpleChatServerHandler extends SimpleChannelInboundHandler<String> {
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -71,6 +73,7 @@ public class SimpleChatServerHandler extends SimpleChannelInboundHandler<String>
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
+        log.info(s);
         Channel inComing = channelHandlerContext.channel();
         for (Channel channel : channels){
             if(channel != inComing){

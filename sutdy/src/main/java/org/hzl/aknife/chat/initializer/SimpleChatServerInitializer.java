@@ -8,7 +8,9 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.hzl.aknife.chat.handler.SimpleChatServerFirstDecoder;
 import org.hzl.aknife.chat.handler.SimpleChatServerHandler;
+import org.hzl.aknife.chat.handler.SimpleChatServerNextDecoder;
 
 /**
  *
@@ -21,6 +23,8 @@ public class SimpleChatServerInitializer extends ChannelInitializer<SocketChanne
 
         pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
         pipeline.addLast("decoder", new StringDecoder());
+        pipeline.addLast(new SimpleChatServerFirstDecoder());
+        pipeline.addLast(new SimpleChatServerNextDecoder());
         pipeline.addLast("encoder", new StringEncoder());
         pipeline.addLast("handler", new SimpleChatServerHandler());
 
