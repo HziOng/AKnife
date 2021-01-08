@@ -1,4 +1,4 @@
-package org.hzl.aknife.client;
+package org.hzl.aknife.gui;
 
 import javax.swing.*;
 

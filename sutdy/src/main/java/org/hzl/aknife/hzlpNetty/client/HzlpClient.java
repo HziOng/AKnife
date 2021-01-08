@@ -7,6 +7,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringEncoder;
+import org.hzl.aknife.hzlpNetty.api.pojo.Request;
 import org.hzl.aknife.hzlpNetty.api.util.ConsantUtil;
 import org.hzl.aknife.hzlpNetty.client.handler.HzlpClientInitializer;
 import org.json.JSONArray;
@@ -45,15 +47,24 @@ public class HzlpClient {
             Channel channel = bootstrap.connect(host, port).sync().channel();
 
             ByteBuf buf = Unpooled.buffer();
-            buf.writeInt(ConsantUtil.PACKAGE_HEADER);
-            buf.writeInt(ConsantUtil.MODEL_ONE);
-            buf.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
+            // 先将协议内容转化为字符串，之后会转化为byte数组，使用上面的buf发送出去
+            StringBuffer strBuf = new StringBuffer();
+            JSONArray jsonArray = new JSONArray();
 
+            // 向协议内容中添加请求头
+            strBuf.append(ConsantUtil.PACKAGE_HEADER+" ")
+                    .append(ConsantUtil.MODEL_ONE+" ")
+                    .append((int) (System.currentTimeMillis() / 1000L + 2208988800L))
+                    .append("\r\n");
+
+            // 向协议内容中添加方法请求体
             JSONObject msg = new JSONObject();
             msg.put("name","贺子龙");
             msg.put("age","20");
             msg.put("id","00001");
-            buf.writeBytes(msg.toString().getBytes());
+            jsonArray.put(msg);
+            strBuf.append(jsonArray.toString());
+            buf.writeBytes(strBuf.toString().getBytes());
 
             channel.writeAndFlush(buf);
 

@@ -19,8 +19,8 @@ public class HzlpClientInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
 
-        pipeline.addLast("decoder", new ResponseDecoder());
-        pipeline.addLast("encoder", new RequestEncoder());
+//        pipeline.addLast("encoder",new RequestEncoder());
         pipeline.addLast("handler",new HzlpClientHandler());
+
     }
 }

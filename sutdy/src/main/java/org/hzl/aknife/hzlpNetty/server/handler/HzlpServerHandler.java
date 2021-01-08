@@ -27,6 +27,8 @@ public class HzlpServerHandler extends SimpleChannelInboundHandler<Request> {
         log.info(request.toString());
         Response response = new Response();
 
+
+
         response.setModel(ConsantUtil.MODEL_ONE);
         response.setStatus(ConsantUtil.STATUS_OK);
         response.setDate(new Date());

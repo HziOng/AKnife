@@ -17,18 +17,13 @@ import java.util.List;
  * @Author HeZiLong
  * @Data 2021/1/7 17:23
  */
-public class RequestEncoder extends MessageToMessageEncoder<Request> {
+public class RequestEncoder extends MessageToMessageEncoder<Byte[]> {
 
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Request request, List<Object> out) throws Exception {
-        final ByteBuf buf = Unpooled.buffer();
+    protected void encode(ChannelHandlerContext channelHandlerContext,Byte[] byteBuf, List<Object> out) throws Exception {final ByteBuf buf = Unpooled.buffer();
 
-        buf.writeInt(ConsantUtil.PACKAGE_HEADER);
-        buf.writeInt(request.getModel());
-        buf.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
-        buf.writeBytes(request.getData().toString().getBytes());
-
-        out.add(buf);
+        System.out.println(byteBuf);
+        out.add(byteBuf);
     }
 }

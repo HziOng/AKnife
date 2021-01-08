@@ -1,4 +1,4 @@
-package org.hzl.aknife.hzlpNetty.server;
+package org.hzl.aknife.hzlps.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -7,26 +7,27 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.hzl.aknife.hzlpNetty.server.handler.HzlpServerInitializer;
+import org.hzl.aknife.hzlps.server.handler.HzlpsServerInitializer;
 
 import java.net.InetSocketAddress;
 
 /**
- * 简易的Http连接器服务端
- * @ClassName HttpServer
+ * @ClassName HzlpsServer
  * @Author HeZiLong
- * @Data 2021/1/7 16:40
+ * @Data 2021/1/8 14:43
  */
-public class HzlpServer {
+public class HzlpsServer {
 
     int port;
 
-    public HzlpServer(int port){
+    public HzlpsServer(int port){
         this.port = port;
     }
 
+
     /**
-     * 方法Hzlp连接器服务端运行主体
+     *
+     * @throws Exception
      */
     public void run() throws Exception{
         EventLoopGroup boss = new NioEventLoopGroup();
@@ -36,7 +37,7 @@ public class HzlpServer {
             bootstrap.group(boss,work)
                     .handler(new LoggingHandler(LogLevel.DEBUG))
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new HzlpServerInitializer());
+                    .childHandler(new HzlpsServerInitializer());
 
             ChannelFuture f = bootstrap.bind(new InetSocketAddress(port)).sync();
             System.out.println(" server start up on port : " + port);
@@ -48,6 +49,6 @@ public class HzlpServer {
     }
 
     public static void main(String[] args) throws Exception {
-        new HzlpServer(8080).run();
+        new HzlpsServer(8081).run();
     }
 }
