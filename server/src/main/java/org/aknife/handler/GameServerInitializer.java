@@ -3,6 +3,9 @@ package org.aknife.handler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import lombok.extern.java.Log;
+import org.aknife.SystemInitializer;
+import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.codec.GameMessageDecoder;
 import org.aknife.message.codec.GameMessageEncoder;
 import org.aknife.util.annotation.Operating;
@@ -26,13 +29,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author HeZiLong
  * @Data 2021/1/11 10:24
  */
+@Log
 public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
 
-    /**
-     * 要扫描的包名
-     */
-    private final String BASE_PACKAGE = "org.aknife";
-    private final String RESOURCE_PATTERN = "/**/*.class";
+
 
     /**
      * 存储协议类型和调用的service方法的映射关系
@@ -46,11 +46,21 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
      */
     private ApplicationContext ioc = null;
 
+    public GameServerInitializer() {
+        super();
+        protocolMap = new ConcurrentHashMap<>();
+        classMap = new ConcurrentHashMap<>();
+    }
+
+    public GameServerInitializer(SystemInitializer systemInitializer) {
+        this.protocolMap = systemInitializer.getProtocolMap();
+        this.classMap = systemInitializer.getClassMap();
+        this.ioc = systemInitializer.getIoc();
+    }
+
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
-        initSpring();
-        initProtocol();
         ChannelPipeline pipeline = socketChannel.pipeline();
 
         pipeline.addLast("decoder", new GameMessageDecoder());
@@ -59,60 +69,4 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
 
     }
 
-    /**
-     * 初始化Spring容器
-     */
-    private void initSpring(){
-        try {
-            ioc = new ClassPathXmlApplicationContext("spring.xml");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 初始化协议code-协议类型
-     */
-    public void initClass(){
-
-    }
-
-
-    /**
-     * 初始化协议内容
-     * @throws Exception
-     */
-    private void initProtocol() throws Exception {
-
-        //spring工具类，可以获取指定路径下的全部类
-        ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        try {
-            String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    ClassUtils.convertClassNameToResourcePath(BASE_PACKAGE) + RESOURCE_PATTERN;
-            Resource[] resources = resourcePatternResolver.getResources(pattern);
-            //MetadataReader 的工厂类
-            MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
-            for (Resource resource : resources) {
-                //用于读取类信息
-                MetadataReader reader = readerFactory.getMetadataReader(resource);
-                //扫描到的class
-                String classname = reader.getClassMetadata().getClassName();
-                Class<?> clazz = Class.forName(classname);
-                //判断是否有指定主解
-                Service classAnnotation = clazz.getAnnotation(Service.class);
-                if (classAnnotation != null) {
-                    Method[] hideMethods = clazz.getMethods();
-                    System.out.println(clazz.getName());
-                    for (Method method : hideMethods){
-                        Operating methodAnnotation = method.getAnnotation(Operating.class);
-                        if(methodAnnotation != null){
-                            protocolMap.put(methodAnnotation.value(), method);
-                        }
-                    }
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 }

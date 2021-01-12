@@ -6,11 +6,6 @@
   <session-factory>
     <property name="current_session_context_class">thread</property>
 
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost/dss</property>
-    <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.connection.password">123</property>
-
     <!-- 可以将向数据库发送的SQL语句显示出来 -->
     <property name="hibernate.show_sql">true</property>
     <!-- 格式化SQL语句 -->
@@ -19,7 +14,5 @@
     <!-- hibernate的方言 -->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
-    <!-- 配置hibernate的映射文件所在的位置 -->
-    <mapping resource="/" />
   </session-factory>
 </hibernate-configuration>

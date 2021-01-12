@@ -1,12 +1,10 @@
 package org.aknife.user.swing;
 
-import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
-import org.aknife.common.PacketFixedData;
+import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.aknife.user.packet.CM_UserLogin;
 import org.aknife.util.ProtocolFixedData;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 
 /**
+ * 用户登录-图形化界面客户端
  * @ClassName SwingLoginForm
  * @Author HeZiLong
  * @Data 2021/1/11 10:40
@@ -89,8 +88,8 @@ public class SwingLoginForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
-                CM_UserLogin packet = new CM_UserLogin(userText.getText(),passwordText.getText());
-                Message message = new Message(PacketFixedData.CM_USERLOGIN, ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
+                CM_UserLogin packet = new CM_UserLogin(userText.getText(),new String(passwordText.getPassword()));
+                Message message = new Message(PacketFixedConsts.getPacketCodeByClass(CM_UserLogin.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
                 channel.writeAndFlush(message);
             }
         });
@@ -98,6 +97,13 @@ public class SwingLoginForm extends JFrame{
 
         JButton registerButton = new JButton("register");
         registerButton.setBounds(250, 80, 80, 25);
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SwingLoginForm.this.dispose();
+                SwingRegisterForm registerForm = new SwingRegisterForm(channel);
+            }
+        });
         panel.add(registerButton);
 
     }
