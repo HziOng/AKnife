@@ -1,6 +1,10 @@
 package org.aknife.message.model;
 
+import io.netty.channel.Channel;
+import org.aknife.user.model.User;
+
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * 客户端和服务端之间沟通的消息，类似于Http协议中的request和Response
@@ -8,7 +12,7 @@ import java.util.Date;
  * @Author HeZiLong
  * @Data 2021/1/11 9:56
  */
-public class Message {
+public class Message<T> {
 
     /**
      * 消息类型
@@ -33,11 +37,15 @@ public class Message {
     /**
      * 消息主体数据
      */
-    private Object data;
+    private T data;
+
+    private Channel channel;
+
+    private User user;
 
     public Message(){}
 
-    public Message(int type, int status, Date date, Object data) {
+    public Message(int type, int status, Date date, T data) {
         this.type = type;
         this.status = status;
         this.date = date;
@@ -80,8 +88,24 @@ public class Message {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -92,6 +116,8 @@ public class Message {
                 ", date=" + date +
                 ", size=" + size +
                 ", data=" + data +
+                ", channel=" + channel +
+                ", user=" + user +
                 '}';
     }
 }

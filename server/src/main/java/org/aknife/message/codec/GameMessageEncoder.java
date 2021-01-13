@@ -5,8 +5,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.util.ProtocolFixedData;
+import org.aknife.constant.ProtocolFixedData;
 
 import java.util.List;
 

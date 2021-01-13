@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.aknife.user.packet.CM_UserLogin;
-import org.aknife.util.ProtocolFixedData;
+import org.aknife.constant.ProtocolFixedData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -89,7 +89,7 @@ public class SwingLoginForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
                 CM_UserLogin packet = new CM_UserLogin(userText.getText(),new String(passwordText.getPassword()));
-                Message message = new Message(PacketFixedConsts.getPacketCodeByClass(CM_UserLogin.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
+                Message message = new Message(PacketFixedConsts.getCodeByClass(CM_UserLogin.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
                 channel.writeAndFlush(message);
             }
         });

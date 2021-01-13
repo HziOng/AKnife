@@ -3,6 +3,7 @@ package org.aknife.handler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.aknife.message.codec.GameMessageDecoder;
 import org.aknife.message.codec.GameMessageEncoder;
 
@@ -18,6 +19,8 @@ public class GameClientInitializer extends ChannelInitializer<SocketChannel> {
 
         pipeline.addLast("decoder", new GameMessageDecoder());
         pipeline.addLast("encoder", new GameMessageEncoder());
+        pipeline.addLast("readTimeOutHandler", new ReadTimeoutHandler(5));
+        pipeline.addLast("heartBeatHandler", new HeartBeatClientHandler());
         pipeline.addLast("controlHandler", new GameClientControlHandler());
     }
 }

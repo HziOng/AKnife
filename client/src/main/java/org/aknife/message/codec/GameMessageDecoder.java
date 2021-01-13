@@ -5,9 +5,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.java.Log;
+import org.aknife.constant.PacketFixedConsts;
+import org.aknife.constant.ProtocolFixedData;
 import org.aknife.message.model.Message;
-import org.aknife.util.ProtocolFixedData;
-import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +25,7 @@ public class GameMessageDecoder extends ByteToMessageDecoder {
         in.markReaderIndex();
         if(ProtocolFixedData.PACKAGE_HEADER == in.readInt()) {
             Message message = new Message();
+
             message.setType(in.readInt());
             message.setStatus(in.readInt());
             message.setDate(new Date((in.readUnsignedInt() - 2208988800L) * 1000L));
@@ -36,11 +37,13 @@ public class GameMessageDecoder extends ByteToMessageDecoder {
             if(in.readableBytes() < message.getSize()){
                 return;
             }
+            Class packetClass = PacketFixedConsts.getClassByType(message.getType());
 
             byte[] temp = new byte[message.getSize()];
             in.readBytes(temp);
             String strData = new String(temp);
-            message.setData(strData);
+            Object data = JSON.parseObject(strData,packetClass);
+            message.setData(data);
             out.add(message);
         }
     }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import javafx.beans.binding.ObjectExpression;
 import lombok.extern.java.Log;
 import org.aknife.link.user.UserChannelConnection;
 import org.aknife.message.model.Message;
@@ -20,51 +21,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Data 2021/1/11 10:22
  */
 @Log
-public class GameServerControlHandler extends SimpleChannelInboundHandler {
+public class GameServerControlHandler extends AbstractServerHandler {
 
-    /**
-     * 存储协议类型和调用的service方法的映射关系
-     */
-    private ConcurrentHashMap<Integer, Method> protocolMap = null;
+    public GameServerControlHandler(){    }
 
-    private ConcurrentHashMap<Channel, User> userChannel = null;
-
-    private ApplicationContext ioc = null;
-
-    public GameServerControlHandler(){
-        super();
-        userChannel = UserChannelConnection.getAllUserChannel();
-    }
-
-    public GameServerControlHandler(ConcurrentHashMap protocolMap, ApplicationContext context){
-        this();
-        this.protocolMap = protocolMap;
-        this.ioc = context;
+    public GameServerControlHandler(ConcurrentHashMap protocolMap,ConcurrentHashMap classMap, ApplicationContext context){
+        super(protocolMap, classMap, context);
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
-        log.info("运行至服务端控制处理程序ServerControlHandler中，得到了"+o);
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
+        log.info("运行至服务端控制处理程序ServerControlHandler中，得到了"+message);
         Channel channel = channelHandlerContext.channel();
         try {
-            // user-channel映射处理
-            if(userChannel.get(channel) == null){
-                User user = new User("未登录用户", "未确定密码");
-                userChannel.put(channel, user);
-            }
-
+            User nowUser = userChannel.get(channel);
             // 协议分发功能
-            Message message = (Message) o;
             Method operaMethod = protocolMap.get(message.getType());
-            System.out.println(operaMethod);
             Object operaObject = ioc.getBean(operaMethod.getDeclaringClass());
-            Class[] paramClass = operaMethod.getParameterTypes();
-            System.out.println(userChannel.get(channelHandlerContext.channel()));
-            // 执行协议对应的处理方法
-            int status =
-                    (int) operaMethod.invoke(operaObject,
-                    userChannel.get(channelHandlerContext.channel()),
-                    JSON.parseObject(message.getData().toString(),paramClass[1]));
+            int status = (int) operaMethod.invoke(operaObject, nowUser, message.getData());
         } catch (Exception e){
             e.printStackTrace();
         }

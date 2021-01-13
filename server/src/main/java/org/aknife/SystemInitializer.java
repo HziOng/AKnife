@@ -11,7 +11,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
 
 import java.io.IOException;
@@ -31,7 +31,6 @@ public class SystemInitializer {
      */
     private ConcurrentHashMap<Integer, Method> protocolMap = new ConcurrentHashMap();
 
-    private ConcurrentHashMap<Integer, Method> classMap = new ConcurrentHashMap();
 
     /**
      * Spring中的IOC容器
@@ -47,7 +46,6 @@ public class SystemInitializer {
 
     public SystemInitializer() {
         initSpring();
-        initClass();
         initProtocol();
     }
 
@@ -62,12 +60,6 @@ public class SystemInitializer {
         }
     }
 
-    /**
-     * 初始化协议code-协议类型
-     */
-    public void initClass(){
-
-    }
 
 
     /**
@@ -91,10 +83,9 @@ public class SystemInitializer {
                 String classname = reader.getClassMetadata().getClassName();
                 Class<?> clazz = Class.forName(classname);
                 //判断是否有指定主解
-                Service classAnnotation = clazz.getAnnotation(Service.class);
+                Controller classAnnotation = clazz.getAnnotation(Controller.class);
                 if (classAnnotation != null) {
                     Method[] hideMethods = clazz.getMethods();
-                    System.out.println(clazz.getName());
                     for (Method method : hideMethods){
                         Operating methodAnnotation = method.getAnnotation(Operating.class);
                         if(methodAnnotation != null){
@@ -103,7 +94,8 @@ public class SystemInitializer {
                                 log.info("运行方法参数不符合规范");
                                 continue;
                             }
-                            protocolMap.put(PacketFixedConsts.getPacketCodeByClass(paramClass[1]), method);
+                            int packetCode = PacketFixedConsts.getCodeByClass(paramClass[1]);
+                            protocolMap.put(packetCode, method);
                         }
                     }
                 }
@@ -119,9 +111,6 @@ public class SystemInitializer {
         return protocolMap;
     }
 
-    public ConcurrentHashMap<Integer, Method> getClassMap() {
-        return classMap;
-    }
 
     public ApplicationContext getIoc() {
         return ioc;

@@ -1,6 +1,7 @@
 package org.aknife.user.packet;
 
 /**
+ * 注册协议
  * @ClassName UserLoginPacket
  * @Author HeZiLong
  * @Data 2021/1/11 16:43

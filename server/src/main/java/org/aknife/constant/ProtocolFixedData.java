@@ -1,4 +1,4 @@
-package org.aknife.util;
+package org.aknife.constant;
 
 /**
  * @ClassName ProtocolFixedData
@@ -9,16 +9,15 @@ public class ProtocolFixedData {
 
     public static final int PACKAGE_HEADER = -32523523;
 
-
     /**
      * 消息请求类型：登录
      */
-    public static final int TYPE_LOGIN = 111;
+    public static final int TYPE_LOGIN = 1;
 
     /**
      * 消息请求类型：注册
      */
-    public static final int TYPE_REGISTER = 222;
+    public static final int TYPE_REGISTER = 2;
 
 
     /**

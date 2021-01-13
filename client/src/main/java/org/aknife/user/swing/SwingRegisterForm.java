@@ -3,9 +3,8 @@ package org.aknife.user.swing;
 import io.netty.channel.Channel;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.user.packet.CM_UserLogin;
 import org.aknife.user.packet.CM_UserRegister;
-import org.aknife.util.ProtocolFixedData;
+import org.aknife.constant.ProtocolFixedData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -86,7 +85,7 @@ public class SwingRegisterForm extends JFrame{
                 CM_UserRegister packet = new CM_UserRegister(userText.getText(),
                         new String(passwordText.getPassword()),
                         new String(confirmPasswordText.getPassword()));
-                Message message = new Message(PacketFixedConsts.getPacketCodeByClass(CM_UserRegister.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
+                Message message = new Message(PacketFixedConsts.getCodeByClass(CM_UserRegister.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
                 channel.writeAndFlush(message);
             }
         });

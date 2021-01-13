@@ -17,29 +17,26 @@ public interface IUserAccountService {
     /**
      * 用户注册-协议请求操作
      * @param operaUser 要执行该操作的用户
-     * @param data 请求数据，这里是用户账号
      * @return 返回执行状态
      * @throws UserException
      */
-    int register(User operaUser, CM_UserRegister data) throws UserException;
+    int register(User operaUser) throws UserException;
 
 
     /**
      * 用户登录-协议请求操作
      * @param operaUser 要执行该操作的用户
-     * @param data 请求数据，这里也是用户账号
      * @return 返回执行状态
      * @throws UserException
      */
-    int login(User operaUser,CM_UserLogin data) throws UserException;
+    int login(User operaUser) throws UserException;
 
 
     /**
      * 用户退出-协议请求操作
      * @param operaUser 要执行该操作的用户
-     * @param data 请求数据，这里也是用户账号
      * @return 返回响应号
      * @throws UserException
      */
-    int dropOut(User operaUser,CM_UserLogin data) throws UserException;
+    int dropOut(User operaUser) throws UserException;
 }

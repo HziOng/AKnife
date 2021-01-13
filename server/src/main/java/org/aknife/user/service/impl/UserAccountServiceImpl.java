@@ -1,7 +1,6 @@
 package org.aknife.user.service.impl;
 
 import lombok.extern.java.Log;
-import org.aknife.constant.PacketFixedConsts;
 import org.aknife.dao.mysql.user.UserAccountDao;
 import org.aknife.user.constant.UserStatusConsts;
 import org.aknife.user.exception.UserException;
@@ -10,12 +9,10 @@ import org.aknife.user.packet.CM_UserLogin;
 import org.aknife.user.packet.CM_UserRegister;
 import org.aknife.user.service.IUserAccountService;
 import org.aknife.user.util.UserUtil;
-import org.aknife.util.ProtocolFixedData;
+import org.aknife.constant.ProtocolFixedData;
 import org.aknife.util.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * 用户账号操作业务
@@ -35,40 +32,38 @@ public class UserAccountServiceImpl implements IUserAccountService {
     }
 
     @Override
-    @Operating
-        public int register(User operaUser, CM_UserRegister data) throws UserException {
+    public int register(User operaUser) throws UserException {
         log.info("用户[ "+operaUser+" ]运行注册方法");
-        User user = userAccountDao.findByUserName(data.getUsername());
-        if (user != null){
-            throw new UserException("该用户已经存在");
+        if (operaUser == null){
+            throw new UserException("输入用户数据为空");
         }
-        operaUser.setUserID(UserUtil.getUUID());
-        operaUser.setUserName(data.getUsername());
-        operaUser.setPassword(data.getPassword());
-        operaUser.setStatus(UserStatusConsts.OFF_LINE);
-        userAccountDao.add(operaUser);
+        User now = userAccountDao.findByUserName(operaUser.getUserName());
+        if (now != null){
+            throw new UserException("该用户名已被注册");
+        }
         return ProtocolFixedData.STATUS_OK;
     }
 
     @Override
-    @Operating
-    public int login(User operaUser, CM_UserLogin data) throws UserException {
+    public int login(User operaUser) throws UserException {
         log.info("用户[ "+operaUser+" ]运行登录方法");
-        User user = userAccountDao.findByUserName(data.getUsername());
-        if (user == null){
-            throw new UserException("用户不存在");
+        if (operaUser == null){
+            throw new UserException("输入用户数据为空");
         }
-        if (user.getStatus() == UserStatusConsts.ON_LINE) {
-            throw new UserException("用户已在其他地方登录，确定强制登录");
+        User now  = userAccountDao.findByUserName(operaUser.getUserName());
+        if (now == null){
+            throw new UserException("该用户不存在，请注册");
         }
-        UserUtil.userCopyToUser(user,operaUser);
-        operaUser.setStatus(UserStatusConsts.ON_LINE);
-        userAccountDao.update(operaUser);
+        if (now.getStatus() == UserStatusConsts.ON_LINE){
+            throw new UserException("该用户已经登录，确定强制登录");
+        }
+        now.setStatus(UserStatusConsts.ON_LINE);
+        userAccountDao.update(now);
         return ProtocolFixedData.STATUS_OK;
     }
 
     @Override
-    public int dropOut(User operaUser, CM_UserLogin data) throws UserException {
+    public int dropOut(User operaUser) throws UserException {
         log.info("用户[ "+operaUser+" ]运行退出方法");
         return ProtocolFixedData.STATUS_OK;
     }
