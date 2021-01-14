@@ -2,17 +2,15 @@ package org.aknife.handler;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.ReadTimeoutException;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.user.model.User;
-import org.aknife.user.packet.CM_UserLogin;
-import org.aknife.user.packet.CM_UserOffLine;
-import org.aknife.user.packet.CM_UserRegister;
+import org.aknife.business.user.model.User;
+import org.aknife.business.user.packet.CM_UserLogin;
+import org.aknife.business.user.packet.CM_UserOffLine;
+import org.aknife.business.user.packet.CM_UserRegister;
 import org.springframework.context.ApplicationContext;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,6 +31,7 @@ public class HeartBeatServerHandler extends AbstractServerHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
+        System.out.println(Thread.currentThread().getId());
         Channel channel = channelHandlerContext.channel();
         User nowUser = userChannel.get(channel);
         // user-channel映射处理

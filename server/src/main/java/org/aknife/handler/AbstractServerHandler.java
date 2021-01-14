@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.aknife.link.user.UserChannelConnection;
 import org.aknife.message.model.Message;
-import org.aknife.user.model.User;
+import org.aknife.business.user.model.User;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;

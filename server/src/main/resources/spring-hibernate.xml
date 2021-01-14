@@ -35,14 +35,17 @@
         <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
         <property name="annotatedClasses">
             <list>
-                <value>org.aknife.user.model.User</value>
+                <value>org.aknife.business.user.model.User</value>
             </list>
         </property>
+    </bean>
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+        <property name="sessionFactory"  ref="sessionFactory"/>
     </bean>
 
     <!-- 事务管理器 -->
     <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager" />

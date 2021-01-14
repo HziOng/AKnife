@@ -1,10 +1,9 @@
 package org.aknife.message.model;
 
 import io.netty.channel.Channel;
-import org.aknife.user.model.User;
+import org.aknife.business.user.model.User;
 
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * 客户端和服务端之间沟通的消息，类似于Http协议中的request和Response

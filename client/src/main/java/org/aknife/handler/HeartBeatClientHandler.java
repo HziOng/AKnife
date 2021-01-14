@@ -5,7 +5,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.ScheduledFuture;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.user.packet.CM_UserHeart;
+import org.aknife.business.user.packet.CM_UserHeart;
 
 import java.util.concurrent.TimeUnit;
 

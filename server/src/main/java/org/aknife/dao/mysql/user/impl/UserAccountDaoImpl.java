@@ -1,14 +1,11 @@
 package org.aknife.dao.mysql.user.impl;
 
 import org.aknife.dao.mysql.user.UserAccountDao;
-import org.aknife.user.model.User;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.aknife.business.user.model.User;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @ClassName UserAccountDaoImpl
@@ -18,54 +15,37 @@ import java.util.List;
 @Repository
 public class UserAccountDaoImpl implements UserAccountDao {
 
-    @Resource(name = "sessionFactory")
-    private SessionFactory sessionFactory;
 
-    protected Session getCurrentSession(){
-        return sessionFactory.getCurrentSession();
+    private HibernateTemplate hibernateTemplate;
+
+    @Resource
+    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+        this.hibernateTemplate = hibernateTemplate;
     }
 
     @Override
     public void add(User user) {
-        Session session = getCurrentSession();
-        session.beginTransaction();
-        session.save(user);
-        session.getTransaction().commit();
+        hibernateTemplate.save(user);
     }
 
     @Override
     public void delete(User user) {
-        Session session = getCurrentSession();
-        session.beginTransaction();
-        session.delete(user);
-        session.getTransaction().commit();
+        hibernateTemplate.delete(user);
     }
 
     @Override
     public User find(int id) {
-        return getCurrentSession().get(User.class, id);
+        return hibernateTemplate.get(User.class, id);
     }
 
     @Override
     public User findByUserName(String username){
-        Session session = getCurrentSession();
-        session.beginTransaction();
-        String hql = "from User as user where user.userName = :username";
-        Query query = session.createQuery(hql);
-        query.setString("username", username);
-        List<User> userList = query.list();
-        session.getTransaction().commit();
-        if (userList==null || userList.size() == 0){
-            return null;
-        }
-        return userList.get(0);
+        System.out.println(hibernateTemplate.find("from UserEntity user where user.userName = ? ", username));
+        return null;
     }
 
     @Override
     public void update(User user) {
-        Session session = getCurrentSession();
-        session.beginTransaction();
-        session.update(user);
-        session.getTransaction().commit();
+        hibernateTemplate.update(user);
     }
 }

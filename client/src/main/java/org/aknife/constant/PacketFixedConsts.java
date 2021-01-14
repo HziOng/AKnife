@@ -1,9 +1,9 @@
 package org.aknife.constant;
 
-import org.aknife.user.packet.CM_UserHeart;
-import org.aknife.user.packet.CM_UserLogin;
-import org.aknife.user.packet.CM_UserOffLine;
-import org.aknife.user.packet.CM_UserRegister;
+import org.aknife.business.user.packet.CM_UserHeart;
+import org.aknife.business.user.packet.CM_UserLogin;
+import org.aknife.business.user.packet.CM_UserOffLine;
+import org.aknife.business.user.packet.CM_UserRegister;
 
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -41,8 +41,7 @@ public class GameMessageDecoder extends ByteToMessageDecoder {
 
             byte[] temp = new byte[message.getSize()];
             in.readBytes(temp);
-            String strData = new String(temp);
-            Object data = JSON.parseObject(strData,packetClass);
+            Object data = JSON.parseObject(new String(temp),packetClass);
             message.setData(data);
             out.add(message);
         }

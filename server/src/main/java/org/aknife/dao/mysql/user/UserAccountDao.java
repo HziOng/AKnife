@@ -1,7 +1,7 @@
 package org.aknife.dao.mysql.user;
 
 import org.aknife.dao.mysql.BaseMySqlDao;
-import org.aknife.user.model.User;
+import org.aknife.business.user.model.User;
 
 /**
  * @ClassName UserAccountDao

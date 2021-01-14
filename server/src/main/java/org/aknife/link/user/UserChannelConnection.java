@@ -1,7 +1,7 @@
 package org.aknife.link.user;
 
 import io.netty.channel.Channel;
-import org.aknife.user.model.User;
+import org.aknife.business.user.model.User;
 
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -1,14 +1,10 @@
 package org.aknife.handler;
 
-import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import javafx.beans.binding.ObjectExpression;
 import lombok.extern.java.Log;
-import org.aknife.link.user.UserChannelConnection;
 import org.aknife.message.model.Message;
-import org.aknife.user.model.User;
+import org.aknife.business.user.model.User;
 import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
@@ -33,8 +29,10 @@ public class GameServerControlHandler extends AbstractServerHandler {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
         log.info("运行至服务端控制处理程序ServerControlHandler中，得到了"+message);
         Channel channel = channelHandlerContext.channel();
+
         try {
             User nowUser = userChannel.get(channel);
+            new ThreadLocal<>().get();
             // 协议分发功能
             Method operaMethod = protocolMap.get(message.getType());
             Object operaObject = ioc.getBean(operaMethod.getDeclaringClass());

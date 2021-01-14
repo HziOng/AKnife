@@ -1,7 +1,7 @@
 package org.aknife.message.model;
 
 import io.netty.channel.Channel;
-import org.aknife.user.model.User;
+import org.aknife.business.user.model.User;
 
 import java.util.Date;
 

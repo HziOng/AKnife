@@ -20,8 +20,7 @@ public class GameMessageEncoder extends MessageToMessageEncoder<Message> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> list) throws Exception {
         ByteBuf buf = Unpooled.buffer();
-        String jsonData = JSON.toJSONString(message.getData());
-        byte[] data = jsonData.getBytes();
+        byte[] data = JSON.toJSONString(message.getData()).getBytes();
         // 向协议内容中添加请求头
         buf.writeInt(ProtocolFixedData.PACKAGE_HEADER);
         buf.writeInt(message.getType());

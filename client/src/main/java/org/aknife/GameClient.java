@@ -6,7 +6,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.aknife.handler.GameClientInitializer;
-import org.aknife.user.swing.SwingLoginForm;
+import org.aknife.business.user.swing.SwingLoginForm;
 
 /**
  * 游戏Java版客户端
