@@ -2,6 +2,7 @@ package org.aknife.handler;
 
 import io.netty.channel.Channel;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.aknife.constant.PacketFixedConsts;
 import org.aknife.link.user.UserChannelConnection;
 import org.aknife.message.model.Message;
 import org.aknife.business.user.model.User;
@@ -35,5 +36,14 @@ abstract class AbstractServerHandler extends SimpleChannelInboundHandler<Message
         this();
         this.protocolMap = protocolMap;
         this.ioc = context;
+    }
+
+    /**
+     * 返回指定协议对象对应的编号
+     * @param clazz
+     * @return
+     */
+    public int getClassCode(Class clazz){
+        return PacketFixedConsts.getCodeByClass(clazz);
     }
 }

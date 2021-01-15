@@ -5,5 +5,5 @@ package org.aknife.business.user.packet;
  * @Author HeZiLong
  * @Data 2021/1/13 17:33
  */
-public class CM_UserHeart {
+public class CM_UserHeart extends Packet {
 }

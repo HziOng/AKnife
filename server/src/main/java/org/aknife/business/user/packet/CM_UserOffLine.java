@@ -5,6 +5,6 @@ package org.aknife.business.user.packet;
  * @Author HeZiLong
  * @Data 2021/1/13 16:31
  */
-public class CM_UserOffLine {
+public class CM_UserOffLine extends Packet {
 
 }

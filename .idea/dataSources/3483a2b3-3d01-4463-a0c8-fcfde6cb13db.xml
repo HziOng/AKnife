@@ -3778,15 +3778,12 @@ SELECT|sys.sys_config
     </column>
     <column id="901" parent="293" name="user_name">
       <Position>2</Position>
-      <Comment>用户名</Comment>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="902" parent="293" name="data">
+    <column id="902" parent="293" name="user_data">
       <Position>3</Position>
-      <Comment>用户数据</Comment>
       <DataType>varchar(255)|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="903" parent="293" name="create_time">
       <Position>4</Position>

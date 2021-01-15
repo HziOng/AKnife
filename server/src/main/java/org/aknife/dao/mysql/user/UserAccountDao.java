@@ -1,5 +1,6 @@
 package org.aknife.dao.mysql.user;
 
+import org.aknife.business.user.entity.UserEntity;
 import org.aknife.dao.mysql.BaseMySqlDao;
 import org.aknife.business.user.model.User;
 
@@ -8,7 +9,7 @@ import org.aknife.business.user.model.User;
  * @Author HeZiLong
  * @Data 2021/1/12 14:57
  */
-public interface UserAccountDao extends BaseMySqlDao<User> {
+public interface UserAccountDao extends BaseMySqlDao<UserEntity> {
 
 
     /**
@@ -16,6 +17,6 @@ public interface UserAccountDao extends BaseMySqlDao<User> {
      * @param username
      * @return
      */
-    User findByUserName(String username);
+    UserEntity findByUserName(String username);
 
 }

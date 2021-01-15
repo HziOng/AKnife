@@ -2,16 +2,18 @@ package org.aknife.business.user.controller;
 
 import lombok.extern.java.Log;
 import org.aknife.business.base.controller.BaseController;
+import org.aknife.business.user.packet.*;
 import org.aknife.constant.ProtocolFixedData;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.user.model.User;
-import org.aknife.business.user.packet.CM_UserLogin;
-import org.aknife.business.user.packet.CM_UserOffLine;
-import org.aknife.business.user.packet.CM_UserRegister;
 import org.aknife.business.user.service.IUserAccountService;
+import org.aknife.message.model.Message;
+import org.aknife.message.transmitter.PacketTransmitter;
 import org.aknife.util.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.util.Date;
 
 /**
  * @ClassName UserAccountController
@@ -29,34 +31,61 @@ public class UserAccountController extends BaseController {
         this.userAccountService = userAccountService;
     }
 
+    /**
+     * 处理用户登录请求
+     * @param operaUser
+     * @param data
+     * @return
+     */
     @Operating
-    public int login(User operaUser, CM_UserLogin data) throws GlobalException {
+    public int login(User operaUser, CM_UserLogin data) {
         log.info("用户[ "+operaUser+" ]运行Controller登录方法");
         try {
+            int interimID = operaUser.getUserID();
             operaUser.setUsername(data.getUsername());
             operaUser.setPassword(data.getPassword());
             userAccountService.login(operaUser);
+            updatePacketTransmitter(interimID, operaUser.getUserID());
+            SM_UserLogin response = new SM_UserLogin(operaUser.getUserID(),operaUser.getUsername(),operaUser.getPassword(), "login successful");
+            writePacket(operaUser, response);
         } catch (GlobalException e){
-
+            log.info(e.getMessage());
         }
         return ProtocolFixedData.STATUS_OK;
     }
 
+    /**
+     * 处理用户注册请求
+     * @param operaUser
+     * @param request
+     * @return
+     */
     @Operating
-    public int register(User operaUser, CM_UserRegister data) throws GlobalException {
+    public int register(User operaUser, CM_UserRegister request) {
         log.info("用户[ "+operaUser+" ]运行Controller注册方法");
-        operaUser.setUsername(data.getUsername());
-        operaUser.setPassword(data.getPassword());
+        if (!request.getPassword().equals(request.getConfirmPassword())){
+            return ProtocolFixedData.STATUS_FAILURE;
+        }
+        operaUser.setUsername(request.getUsername());
+        operaUser.setPassword(request.getPassword());
         try {
             userAccountService.register(operaUser);
         } catch (GlobalException e) {
             e.printStackTrace();
         }
+        SM_UserRegister response = new SM_UserRegister(operaUser.getUsername(),operaUser.getPassword(),"registration success");
+        writePacket(operaUser, response);
         return ProtocolFixedData.STATUS_OK;
     }
 
+    /**
+     * 用户下线请求
+     * @param operaUser
+     * @param data
+     * @return
+     */
     @Operating
-    public int offLine(User operaUser, CM_UserOffLine data) throws GlobalException{
+    public int offLine(User operaUser, CM_UserOffLine data){
         log.info("用户[ "+operaUser+" ]运行Controller下线方法");
         return ProtocolFixedData.STATUS_OK;
     }

@@ -13,21 +13,21 @@ import java.util.Date;
  * @Author HeZiLong
  * @Data 2021/1/14 15:41
  */
+@Data
 @Entity
 @Table(name = "t_user")
-@Data
 public class UserEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "user_name", length = 50)
     private String userName;
 
     @Column(name = "user_data", length = 255)
-    private String data;
+    private String userData;
 
+    @Transient
     private User user;
 
     @Column(name = "create_time", columnDefinition="DATE")
@@ -37,4 +37,23 @@ public class UserEntity implements Serializable {
     @Column(name = "update_time", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date updateTime;
+
+    public void setData(String data) {
+        this.userData = data;
+        user = JSON.parseObject(data, User.class);
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        id = user.getUserID();
+        userName = user.getUsername();
+        userData = JSON.toJSONString(user);
+    }
+
+    public User getUser() {
+        if (user == null){
+            user = JSON.parseObject(userData, User.class);
+        }
+        return user;
+    }
 }

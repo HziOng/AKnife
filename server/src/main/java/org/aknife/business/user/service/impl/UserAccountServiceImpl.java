@@ -1,6 +1,8 @@
 package org.aknife.business.user.service.impl;
 
 import lombok.extern.java.Log;
+import org.aknife.business.user.manager.UserManager;
+import org.aknife.business.user.util.UserUtil;
 import org.aknife.dao.mysql.user.UserAccountDao;
 import org.aknife.business.user.constant.UserStatusConsts;
 import org.aknife.business.base.exception.GlobalException;
@@ -20,11 +22,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserAccountServiceImpl implements IUserAccountService {
 
-    private UserAccountDao userAccountDao;
+    private UserManager userManager;
 
     @Autowired
-    public void setUserAccountDao(UserAccountDao userAccountDao) {
-        this.userAccountDao = userAccountDao;
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @Override
@@ -33,10 +35,11 @@ public class UserAccountServiceImpl implements IUserAccountService {
         if (operaUser == null){
             throw new GlobalException("输入用户数据为空");
         }
-        User now = userAccountDao.findByUserName(operaUser.getUsername());
+        User now = userManager.queryUserByName(operaUser.getUsername());
         if (now != null){
             throw new GlobalException("该用户名已被注册");
         }
+        userManager.addUser(operaUser);
         return ProtocolFixedData.STATUS_OK;
     }
 
@@ -46,7 +49,7 @@ public class UserAccountServiceImpl implements IUserAccountService {
         if (operaUser == null){
             throw new GlobalException("输入用户数据为空");
         }
-        User now  = userAccountDao.findByUserName(operaUser.getUsername());
+        User now  = userManager.queryUserByName(operaUser.getUsername());
         if (now == null){
             throw new GlobalException("该用户不存在，请注册");
         }
@@ -57,7 +60,8 @@ public class UserAccountServiceImpl implements IUserAccountService {
             throw new GlobalException("用户密码错误");
         }
         now.setStatus(UserStatusConsts.ON_LINE);
-        userAccountDao.update(now);
+        UserUtil.userCopyToUser(now, operaUser);
+        userManager.updateUser(now);
         return ProtocolFixedData.STATUS_OK;
     }
 

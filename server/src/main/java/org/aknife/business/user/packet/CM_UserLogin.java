@@ -5,7 +5,7 @@ package org.aknife.business.user.packet;
  * @Author HeZiLong
  * @Data 2021/1/11 16:43
  */
-public class CM_UserLogin {
+public class CM_UserLogin extends Packet {
 
     private String username;
 

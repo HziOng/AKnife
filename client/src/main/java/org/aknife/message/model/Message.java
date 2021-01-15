@@ -38,9 +38,6 @@ public class Message<T> {
      */
     private T data;
 
-    private Channel channel;
-
-    private User user;
 
     public Message(){}
 
@@ -91,21 +88,6 @@ public class Message<T> {
         this.data = data;
     }
 
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public String toString() {
@@ -115,8 +97,6 @@ public class Message<T> {
                 ", date=" + date +
                 ", size=" + size +
                 ", data=" + data +
-                ", channel=" + channel +
-                ", user=" + user +
                 '}';
     }
 }

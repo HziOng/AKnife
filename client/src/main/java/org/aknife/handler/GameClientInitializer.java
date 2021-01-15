@@ -19,7 +19,6 @@ public class GameClientInitializer extends ChannelInitializer<SocketChannel> {
 
         pipeline.addLast("decoder", new GameMessageDecoder());
         pipeline.addLast("encoder", new GameMessageEncoder());
-        pipeline.addLast("readTimeOutHandler", new ReadTimeoutHandler(120));
         pipeline.addLast("heartBeatHandler", new HeartBeatClientHandler());
         pipeline.addLast("controlHandler", new GameClientControlHandler());
     }

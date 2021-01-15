@@ -48,5 +48,19 @@
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
+    <!--    事务规则   -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="allDaoMethod" expression="execution(* org.aknife.dao.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="allDaoMethod" />
+    </aop:config>
     <tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

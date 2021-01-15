@@ -1,9 +1,6 @@
 package org.aknife.constant;
 
-import org.aknife.business.user.packet.CM_UserHeart;
-import org.aknife.business.user.packet.CM_UserLogin;
-import org.aknife.business.user.packet.CM_UserOffLine;
-import org.aknife.business.user.packet.CM_UserRegister;
+import org.aknife.business.user.packet.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,14 +39,26 @@ public class PacketFixedConsts {
         CM_USERREGISTER(222, CM_UserRegister.class),
 
         /**
-         * 下线
+         * 断开连接
          */
         CM_USERCLOSECONNECTION(111, CM_UserOffLine.class),
 
         /**
          * 心跳协议
          */
-        CM_USERHEART(000, CM_UserHeart.class);
+        CM_USERHEART(000,CM_UserHeart .class),
+
+        /**
+         * 用户登录响应
+         */
+        SM_USERLOGIN(334, SM_UserLogin.class),
+
+        /**
+         * 用户注册响应
+         */
+        SM_USERREGISTER(224, SM_UserRegister.class);
+
+
 
         private final int value;
 

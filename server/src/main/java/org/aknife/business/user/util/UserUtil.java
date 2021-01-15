@@ -35,7 +35,7 @@ public class UserUtil {
      */
     public static int getUUID(){
         int result = 0;
-        DateFormat format = new SimpleDateFormat("yyyyMMdd");
+        DateFormat format = new SimpleDateFormat("yyMMddss");
         String formatDate = format.format(new Date());
         Integer nowTime = Integer.parseInt(formatDate);
         if (nowTime != now){
@@ -43,9 +43,5 @@ public class UserUtil {
             number = 1;
         }
         return Integer.parseInt(""+formatDate+number++);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(getUUID());
     }
 }

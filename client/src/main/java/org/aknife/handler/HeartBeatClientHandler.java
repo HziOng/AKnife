@@ -1,8 +1,11 @@
 package org.aknife.handler;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.ScheduledFuture;
+import org.aknife.business.user.packet.SM_UserLogin;
+import org.aknife.business.user.packet.SM_UserRegister;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.aknife.business.user.packet.CM_UserHeart;
@@ -14,12 +17,16 @@ import java.util.concurrent.TimeUnit;
  * @Author HeZiLong
  * @Data 2021/1/13 16:54
  */
-public class HeartBeatClientHandler extends SimpleChannelInboundHandler<Message> {
+public class HeartBeatClientHandler extends AbstractClientHandler {
 
     private volatile ScheduledFuture<?> heartBeat;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
+        // 用户如果发来的不是登录，也不是注册响应，同时用户还没有登录成功，那么用户将没有权限操作进行其他操作
+        if ((user == null) && (msg.getType() != getCode(SM_UserLogin.class) || msg.getType() != getCode(SM_UserRegister.class))){
+            // 这里要进行弹框，显示没有权限操作。
+        }
         if (msg.getType() == PacketFixedConsts.getCodeByClass(CM_UserHeart.class)){
             heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatTask(ctx),0,5000, TimeUnit.MILLISECONDS);
             return;

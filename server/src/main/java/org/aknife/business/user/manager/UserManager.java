@@ -29,4 +29,10 @@ public interface UserManager {
      * @return
      */
     User queryUserByName(String username);
+
+    /**
+     * 添加用户
+     * @param user
+     */
+    void addUser(User user);
 }
