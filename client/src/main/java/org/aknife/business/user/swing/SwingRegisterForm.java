@@ -3,8 +3,9 @@ package org.aknife.business.user.swing;
 import io.netty.channel.Channel;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.business.user.packet.CM_UserRegister;
+import org.aknife.business.user.packet.account.CM_UserRegister;
 import org.aknife.constant.ProtocolFixedData;
+import org.aknife.message.transmitter.PacketTransmitter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -85,8 +86,7 @@ public class SwingRegisterForm extends JFrame{
                 CM_UserRegister packet = new CM_UserRegister(userText.getText(),
                         new String(passwordText.getPassword()),
                         new String(confirmPasswordText.getPassword()));
-                Message message = new Message(PacketFixedConsts.getCodeByClass(CM_UserRegister.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
-                channel.writeAndFlush(message);
+                PacketTransmitter.writePacket(packet);
             }
         });
         panel.add(registerButton);
@@ -97,7 +97,7 @@ public class SwingRegisterForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingRegisterForm.this.dispose();
-                SwingLoginForm loginForm = new SwingLoginForm(channel);
+                SwingLoginForm loginForm = new SwingLoginForm();
             }
         });
         panel.add(loginButton);

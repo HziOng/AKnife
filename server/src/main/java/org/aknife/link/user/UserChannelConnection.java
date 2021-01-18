@@ -6,6 +6,7 @@ import org.aknife.business.user.model.User;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 用户存储Channel-User的关系映射
  * @ClassName UserConnection
  * @Author HeZiLong
  * @Data 2021/1/12 11:08

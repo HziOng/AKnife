@@ -1,10 +1,12 @@
 package org.aknife.business.user.swing;
 
 import io.netty.channel.Channel;
+import org.aknife.business.user.model.User;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.business.user.packet.CM_UserLogin;
+import org.aknife.business.user.packet.account.CM_UserLogin;
 import org.aknife.constant.ProtocolFixedData;
+import org.aknife.message.transmitter.PacketTransmitter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +21,8 @@ import java.util.Date;
  */
 public class SwingLoginForm extends JFrame{
 
+    private User user;
+
     /**
      * 用于实现注册之后直接在登录界面显示用户名
      */
@@ -31,7 +35,7 @@ public class SwingLoginForm extends JFrame{
      */
     private Channel channel;
 
-    public SwingLoginForm(Channel channel){
+    public SwingLoginForm(){
         // 设置窗体属性
         super("Login Example");
         this.setSize(350, 200);
@@ -59,9 +63,6 @@ public class SwingLoginForm extends JFrame{
          */
         JLabel userLabel = new JLabel("User:");
         userLabel.setBounds(10,20,80,25);
-        if(username != null && !"".equals(username)){
-            userLabel.setText(username);
-        }
         panel.add(userLabel);
 
         JTextField userText = new JTextField(20);
@@ -89,8 +90,8 @@ public class SwingLoginForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
                 CM_UserLogin packet = new CM_UserLogin(userText.getText(),new String(passwordText.getPassword()));
-                Message message = new Message(PacketFixedConsts.getCodeByClass(CM_UserLogin.class), ProtocolFixedData.STATUS_OK, new Date(System.currentTimeMillis()), packet);
-                channel.writeAndFlush(message);
+                PacketTransmitter.writePacket(packet);
+                SwingLoginForm.this.dispose();
             }
         });
         panel.add(loginButton);

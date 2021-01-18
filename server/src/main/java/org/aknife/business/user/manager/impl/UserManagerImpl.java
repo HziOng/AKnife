@@ -21,9 +21,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class UserManagerImpl implements UserManager {
 
-    private CacheManager manager = CacheManager.getInstance();
+    private CacheManager manager;
 
     private UserAccountDao userAccountDao;
+
+    @Autowired
+    public void setManager(CacheManager manager) {
+        this.manager = manager;
+    }
 
     @Autowired
     public void setUserAccountDao(UserAccountDao userAccountDao) {
@@ -51,10 +56,14 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User queryUserByName(String username) {
-        UserEntity userEntity = userAccountDao.findByUserName(username);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(210115561);
+/*        UserEntity userEntity = userAccountDao.findByUserName(username);
         if (userEntity == null){
             return null;
-        }
+        }*/
+        UserEntity now = manager.getClassObject(UserEntity.class, userEntity.getId());
+        System.out.println(now);
         manager.addCacheIfAbsent(UserEntity.class,userEntity.getId(),userEntity);
         return userEntity.getUser();
     }

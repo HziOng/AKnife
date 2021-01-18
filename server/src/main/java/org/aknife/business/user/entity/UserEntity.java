@@ -3,6 +3,7 @@ package org.aknife.business.user.entity;
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import org.aknife.business.user.model.User;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "t_user")
+@Lazy(value = false)
 public class UserEntity implements Serializable {
 
     @Id
@@ -37,6 +39,12 @@ public class UserEntity implements Serializable {
     @Column(name = "update_time", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date updateTime;
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+        getUser().setUsername(userName);
+        userData = JSON.toJSONString(getUser());
+    }
 
     public void setData(String data) {
         this.userData = data;

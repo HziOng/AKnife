@@ -54,12 +54,11 @@
             <tx:method name="add*" propagation="REQUIRED" />
             <tx:method name="update*" propagation="REQUIRED" />
             <tx:method name="del*" propagation="REQUIRED" />
-            <tx:method name="*" propagation="REQUIRED" read-only="true" />
         </tx:attributes>
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="allDaoMethod" expression="execution(* org.aknife.dao.*.*(..))" />
+        <aop:pointcut id="allDaoMethod" expression="execution(* org.aknife.business.user.service.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="allDaoMethod" />
     </aop:config>
     <tx:annotation-driven transaction-manager="transactionManager" />

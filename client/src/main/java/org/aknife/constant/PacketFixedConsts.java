@@ -1,6 +1,8 @@
 package org.aknife.constant;
 
-import org.aknife.business.user.packet.*;
+import org.aknife.business.user.packet.account.*;
+import org.aknife.business.user.packet.character.CM_SwitchMap;
+import org.aknife.business.user.packet.character.SM_SwitchMap;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +31,8 @@ public class PacketFixedConsts {
 
     enum Packet{
 
+        // 以下部分为用户账号操作协议========================================================================
+
         /**
          * 登录
          */
@@ -46,7 +50,7 @@ public class PacketFixedConsts {
         /**
          * 心跳协议
          */
-        CM_USERHEART(000,CM_UserHeart .class),
+        CM_USERHEART(000, CM_UserHeart.class),
 
         /**
          * 用户登录响应
@@ -56,7 +60,13 @@ public class PacketFixedConsts {
         /**
          * 用户注册响应
          */
-        SM_USERREGISTER(224, SM_UserRegister.class);
+        SM_USERREGISTER(224, SM_UserRegister.class),
+
+        // 以下部分为用户角色操作协议========================================================================
+
+        SM_SWITCHMAP(400, SM_SwitchMap.class),
+
+        CM_SWITCHMAP(401, CM_SwitchMap.class);
 
 
 
@@ -81,7 +91,7 @@ public class PacketFixedConsts {
         if (packetCodeMap.containsKey(clazz)){
             return packetCodeMap.get(clazz);
         }
-        throw new RuntimeException("不包含该协议中不包含"+clazz);
+        throw new RuntimeException("不包含该协议! 不包含"+clazz);
     }
 
     public static Class getClassByType(int type){

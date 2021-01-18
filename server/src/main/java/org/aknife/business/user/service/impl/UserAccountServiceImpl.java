@@ -56,7 +56,7 @@ public class UserAccountServiceImpl implements IUserAccountService {
         if (now.getStatus() == UserStatusConsts.ON_LINE){
             throw new GlobalException("该用户已经登录，确定强制登录");
         }
-        if (now.getPassword() == operaUser.getPassword()) {
+        if (now.getPassword() != operaUser.getPassword()) {
             throw new GlobalException("用户密码错误");
         }
         now.setStatus(UserStatusConsts.ON_LINE);

@@ -19,10 +19,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Log
 public class GameServerControlHandler extends AbstractServerHandler {
 
+    /**
+     * 存储协议类型和调用的service方法的映射关系
+     */
+    ConcurrentHashMap<Integer, Method> protocolMap = null;
+
     public GameServerControlHandler(){    }
 
     public GameServerControlHandler(ConcurrentHashMap protocolMap,ConcurrentHashMap classMap, ApplicationContext context){
-        super(protocolMap, classMap, context);
+        super(classMap, context);
+        this.protocolMap = protocolMap;
     }
 
     @Override

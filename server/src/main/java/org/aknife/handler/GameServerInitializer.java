@@ -53,7 +53,7 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
 
         pipeline.addLast("decoder", new GameMessageDecoder());
         pipeline.addLast("encoder", new GameMessageEncoder());
-        pipeline.addLast("heartBeatHandler", new HeartBeatServerHandler(protocolMap, classMap, ioc));
+        pipeline.addLast("heartBeatHandler", new HeartBeatServerHandler(classMap, ioc));
         pipeline.addLast("controlHandler", new GameServerControlHandler(protocolMap, classMap, ioc));
 
     }

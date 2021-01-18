@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Timer;
@@ -23,23 +24,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 @Repository
 public class CacheManager {
 
-    private static volatile CacheManager manager = null;
-
-    private CacheManager(){
-        TimerManager timerManager = new TimerManager(this);
-    }
-
-    public static CacheManager getInstance(){
-        if (manager == null){
-            synchronized (CacheManager.class){
-                if (manager == null){
-                    manager = new CacheManager();
-                }
-            }
-        }
-        return manager;
-    }
-
     private ConcurrentHashMap<Class, ConcurrentHashMap<? extends Serializable, ?>> cache = new ConcurrentHashMap<>();
 
     /**
@@ -49,9 +33,15 @@ public class CacheManager {
 
     private CacheDao cacheDao ;
 
+    private TimerManager timerManager;
+
     @Autowired
     public void setCacheDao(CacheDao cacheDao) {
         this.cacheDao = cacheDao;
+    }
+
+    public CacheManager(){
+        timerManager = new TimerManager(this);
     }
 
     /**
@@ -91,7 +81,10 @@ public class CacheManager {
         ConcurrentHashMap<K,V> classCache = getCache(clazz);
         V value =  classCache.get(key);
         if (value == null){
-            cacheDao.load(clazz, 1);
+            value = cacheDao.load(clazz, key);
+            if (value == null){
+                return null;
+            }
             classCache.put(key, value);
         }
         return value;
@@ -108,10 +101,14 @@ public class CacheManager {
     }
 
     /**
-     * 将数据更新到数据库中
+     * 立刻将数据更新到数据库中
      */
     public void synchronizeData(){
+        if (updateQueue.isEmpty()){
+            return;
+        }
         cacheDao.updateList(updateQueue.toArray());
+        updateQueue.clear();
     }
 
     /**~
@@ -136,7 +133,7 @@ public class CacheManager {
     }
 
     class TimerManager{
-        private static final long PERIOD_DAY=60 * 1000;  //每隔六十秒执行一次
+        private static final long PERIOD_DAY = 1000;  //每隔六十秒执行一次
         public TimerManager(CacheManager manager) {
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {

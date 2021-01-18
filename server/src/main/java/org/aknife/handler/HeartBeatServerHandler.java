@@ -4,12 +4,11 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.ReadTimeoutException;
 import org.aknife.business.user.util.UserUtil;
-import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.aknife.business.user.model.User;
-import org.aknife.business.user.packet.CM_UserLogin;
-import org.aknife.business.user.packet.CM_UserOffLine;
-import org.aknife.business.user.packet.CM_UserRegister;
+import org.aknife.business.user.packet.account.CM_UserLogin;
+import org.aknife.business.user.packet.account.CM_UserOffLine;
+import org.aknife.business.user.packet.account.CM_UserRegister;
 import org.aknife.message.transmitter.PacketTransmitter;
 import org.springframework.context.ApplicationContext;
 
@@ -27,8 +26,8 @@ public class HeartBeatServerHandler extends AbstractServerHandler {
         super();
     }
 
-    public HeartBeatServerHandler(ConcurrentHashMap protocolMap,ConcurrentHashMap classMap, ApplicationContext context){
-        super(protocolMap, classMap, context);
+    public HeartBeatServerHandler(ConcurrentHashMap classMap, ApplicationContext context){
+        super(classMap, context);
     }
 
     @Override

@@ -18,10 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 abstract class AbstractServerHandler extends SimpleChannelInboundHandler<Message> {
 
-    /**
-     * 存储协议类型和调用的service方法的映射关系
-     */
-    ConcurrentHashMap<Integer, Method> protocolMap = null;
+
 
 
     ConcurrentHashMap<Channel, User> userChannel = null;
@@ -32,9 +29,8 @@ abstract class AbstractServerHandler extends SimpleChannelInboundHandler<Message
         userChannel = UserChannelConnection.getAllUserChannel();
     }
 
-    public AbstractServerHandler(ConcurrentHashMap protocolMap,ConcurrentHashMap classMap, ApplicationContext context){
+    public AbstractServerHandler(ConcurrentHashMap classMap, ApplicationContext context){
         this();
-        this.protocolMap = protocolMap;
         this.ioc = context;
     }
 

@@ -42,10 +42,6 @@ public class UserAccountDaoImpl implements UserAccountDao {
     public void add(UserEntity user) {
         log.debug("add "+user+ " instance");
         try {
-            System.out.println(user);
-/*            hibernateTemplate.setCheckWriteOperations(false);
-            hibernateTemplate.save(user);
-            hibernateTemplate.flush();*/
             Session session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(user);

@@ -42,7 +42,7 @@ public class GameClient {
                     .handler(new GameClientInitializer());
 
             Channel channel = bootstrap.connect(host, port).sync().channel();
-            new SwingLoginForm(channel);
+            new SwingLoginForm();
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();

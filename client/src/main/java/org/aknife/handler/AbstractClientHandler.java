@@ -1,10 +1,8 @@
 package org.aknife.handler;
 
-import io.netty.channel.Channel;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.aknife.SystemInitializer;
 import org.aknife.business.user.model.User;
-import org.aknife.business.user.packet.SM_UserLogin;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.springframework.context.ApplicationContext;
