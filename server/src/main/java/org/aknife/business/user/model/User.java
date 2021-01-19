@@ -1,9 +1,12 @@
 package org.aknife.business.user.model;
 
 import lombok.Data;
+import org.aknife.business.user.character.model.UserCharacter;
 import org.aknife.resource.model.Location;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @ClassName User
@@ -20,19 +23,16 @@ public class User implements Serializable {
     private String password;
 
     /**
+     * 默认使用的角色
+     */
+    private int characterId;
+
+    /**
      * 用户状态：上线还是下线
      */
     private int status;
 
-    /**
-     * 用户所处的地图ID
-     */
-    private Integer mapID;
-
-    /**
-     * 用户所处的地图上的位置
-     */
-    private Location location;
+    private ArrayList<Integer> characterIds = new ArrayList<>();
 
     public User() {
     }

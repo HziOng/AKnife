@@ -1,8 +1,8 @@
 package org.aknife.constant;
 
-import org.aknife.business.user.packet.account.*;
-import org.aknife.business.user.packet.character.CM_SwitchMap;
-import org.aknife.business.user.packet.character.SM_SwitchMap;
+import org.aknife.business.user.packet.*;
+import org.aknife.business.user.character.packet.CM_SwitchMap;
+import org.aknife.business.user.character.packet.SM_SwitchMap;
 
 import java.util.concurrent.ConcurrentHashMap;
 

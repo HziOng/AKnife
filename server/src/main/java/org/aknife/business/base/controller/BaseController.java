@@ -2,7 +2,7 @@ package org.aknife.business.base.controller;
 
 import io.netty.channel.Channel;
 import org.aknife.business.user.model.User;
-import org.aknife.business.user.packet.Packet;
+import org.aknife.business.base.packet.Packet;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.aknife.message.transmitter.PacketTransmitter;

@@ -27,7 +27,7 @@ public class UserEntity implements Serializable {
     private String userName;
 
     @Column(name = "user_data", length = 255)
-    private String userData;
+    private String data;
 
     @Transient
     private User user;
@@ -43,24 +43,18 @@ public class UserEntity implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
         getUser().setUsername(userName);
-        userData = JSON.toJSONString(getUser());
-    }
-
-    public void setData(String data) {
-        this.userData = data;
-        user = JSON.parseObject(data, User.class);
     }
 
     public void setUser(User user) {
         this.user = user;
         id = user.getUserID();
+        data = JSON.toJSONString(user);
         userName = user.getUsername();
-        userData = JSON.toJSONString(user);
     }
 
     public User getUser() {
         if (user == null){
-            user = JSON.parseObject(userData, User.class);
+            user = JSON.parseObject(data, User.class);
         }
         return user;
     }

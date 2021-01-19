@@ -1,14 +1,16 @@
 package org.aknife.business.user.service.impl;
 
 import lombok.extern.java.Log;
+import org.aknife.business.user.character.manager.CharacterManager;
+import org.aknife.business.user.character.model.UserCharacter;
 import org.aknife.business.user.manager.UserManager;
 import org.aknife.business.user.util.UserUtil;
-import org.aknife.dao.mysql.user.UserAccountDao;
 import org.aknife.business.user.constant.UserStatusConsts;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.user.model.User;
 import org.aknife.business.user.service.IUserAccountService;
 import org.aknife.constant.ProtocolFixedData;
+import org.aknife.resource.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,13 @@ import org.springframework.stereotype.Service;
 public class UserAccountServiceImpl implements IUserAccountService {
 
     private UserManager userManager;
+
+    private CharacterManager characterManager;
+
+    @Autowired
+    public void setCharacterManager(CharacterManager characterManager) {
+        this.characterManager = characterManager;
+    }
 
     @Autowired
     public void setUserManager(UserManager userManager) {
@@ -39,6 +48,13 @@ public class UserAccountServiceImpl implements IUserAccountService {
         if (now != null){
             throw new GlobalException("该用户名已被注册");
         }
+        // 新建角色
+        UserCharacter character = new UserCharacter();
+        character.setId(UserUtil.getCharacterId(operaUser.getUserID(),1));
+        character.setMapID(0);
+        character.setLocation(new Location(10,10,0));
+        operaUser.setCharacterId(character.getId());
+        operaUser.getCharacterIds().add(character.getId());
         userManager.addUser(operaUser);
         return ProtocolFixedData.STATUS_OK;
     }
@@ -56,7 +72,7 @@ public class UserAccountServiceImpl implements IUserAccountService {
         if (now.getStatus() == UserStatusConsts.ON_LINE){
             throw new GlobalException("该用户已经登录，确定强制登录");
         }
-        if (now.getPassword() != operaUser.getPassword()) {
+        if (!now.getPassword().equals(operaUser.getPassword())) {
             throw new GlobalException("用户密码错误");
         }
         now.setStatus(UserStatusConsts.ON_LINE);

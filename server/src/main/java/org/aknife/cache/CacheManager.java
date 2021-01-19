@@ -1,19 +1,14 @@
 package org.aknife.cache;
 
-import org.aknife.dao.mysql.CacheDao;
-import org.aknife.dao.mysql.impl.CacheDaoImpl;
+import org.aknife.dao.mysql.cache.CacheDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * 缓存管理器
@@ -30,6 +25,11 @@ public class CacheManager {
      * 要更新的数据队列
      */
     private ConcurrentLinkedQueue<Object> updateQueue = new ConcurrentLinkedQueue<>();
+
+    /**
+     * 要新增的数据队列
+     */
+    private ConcurrentLinkedQueue<Object> addQueue = new ConcurrentLinkedQueue<>();
 
     private CacheDao cacheDao ;
 
@@ -66,7 +66,28 @@ public class CacheManager {
         updateQueue.add(value);
     }
 
+    /**
+     * 向缓存中添加数据，并准备更新到数据库中
+     * @param clazz
+     * @param key
+     * @param value
+     * @param <K>
+     * @param <V>
+     */
     public <K extends Serializable,V> void addCacheIfAbsent(Class clazz, K key, V value){
+        getCache(clazz).putIfAbsent(key,value);
+        addQueue.add(value);
+    }
+
+    /**
+     * 向缓存中添加数据，但是不更新到数据库中
+     * @param clazz
+     * @param key
+     * @param value
+     * @param <K>
+     * @param <V>
+     */
+    public <K extends Serializable,V> void addCacheIfAbsentNoUpdateToMySQL(Class clazz, K key, V value){
         getCache(clazz).putIfAbsent(key,value);
     }
     /**
@@ -104,11 +125,14 @@ public class CacheManager {
      * 立刻将数据更新到数据库中
      */
     public void synchronizeData(){
-        if (updateQueue.isEmpty()){
-            return;
+        if (!updateQueue.isEmpty()){
+            cacheDao.updateList(updateQueue.toArray());
+            updateQueue.clear();
         }
-        cacheDao.updateList(updateQueue.toArray());
-        updateQueue.clear();
+        if (!addQueue.isEmpty()) {
+            cacheDao.addList(addQueue.toArray());
+            addQueue.clear();
+        }
     }
 
     /**~

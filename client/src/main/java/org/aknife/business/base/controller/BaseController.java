@@ -1,9 +1,13 @@
 package org.aknife.business.base.controller;
 
 import io.netty.channel.Channel;
+import org.aknife.business.user.character.model.UserCharacter;
 import org.aknife.business.user.model.User;
 import org.aknife.message.model.Message;
 
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -13,19 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BaseController {
 
-    protected static User user;
+    protected static User user = new User();
 
-    private Message message;
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
-
-    private ConcurrentHashMap<Channel, User> userChannel = null;
-
+    protected static ConcurrentHashMap<Integer, UserCharacter> characters = new ConcurrentHashMap<>();
 
 }

@@ -1,17 +1,14 @@
 package org.aknife.business.user.swing;
 
 import io.netty.channel.Channel;
+import org.aknife.business.base.service.BaseService;
 import org.aknife.business.user.model.User;
-import org.aknife.constant.PacketFixedConsts;
-import org.aknife.message.model.Message;
 import org.aknife.business.user.packet.account.CM_UserLogin;
-import org.aknife.constant.ProtocolFixedData;
 import org.aknife.message.transmitter.PacketTransmitter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 /**
  * 用户登录-图形化界面客户端
@@ -34,6 +31,27 @@ public class SwingLoginForm extends JFrame{
      * 用于使用Netty和数据进行交互
      */
     private Channel channel;
+
+
+    // 之后是控件
+    /**
+     * 用户信息显示
+     */
+    JTextField userText = new JTextField(20);
+
+    /**
+     * 用户错误信息显示
+     */
+    JLabel errorLabel = new JLabel("");
+
+    public void setUsername(String username){
+        this.username = username;
+        userText.setText(username);
+    }
+
+    public void setError(String error){
+        errorLabel.setText(error);
+    }
 
     public SwingLoginForm(){
         // 设置窗体属性
@@ -65,7 +83,7 @@ public class SwingLoginForm extends JFrame{
         userLabel.setBounds(10,20,80,25);
         panel.add(userLabel);
 
-        JTextField userText = new JTextField(20);
+
         userText.setBounds(100,20,165,25);
         panel.add(userText);
 
@@ -91,7 +109,6 @@ public class SwingLoginForm extends JFrame{
                 checkInputDateFormat();
                 CM_UserLogin packet = new CM_UserLogin(userText.getText(),new String(passwordText.getPassword()));
                 PacketTransmitter.writePacket(packet);
-                SwingLoginForm.this.dispose();
             }
         });
         panel.add(loginButton);
@@ -103,10 +120,17 @@ public class SwingLoginForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 SwingLoginForm.this.dispose();
                 SwingRegisterForm registerForm = new SwingRegisterForm(channel);
+                BaseService.jFrameStack.pop();
+                BaseService.jFrameStack.push(registerForm);
             }
         });
         panel.add(registerButton);
 
+        /**
+         * 显示错误信息
+         */
+        errorLabel.setBounds(50,110,150,25);
+        panel.add(errorLabel);
     }
 
     public boolean checkInputDateFormat(){

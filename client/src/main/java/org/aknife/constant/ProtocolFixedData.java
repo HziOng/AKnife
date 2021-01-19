@@ -24,7 +24,7 @@ public class ProtocolFixedData {
     /**
      * 消息请求状态：成功
      */
-    public static final int STATUS_OK = 2;
+    public static final int STATUS_OK = 1;
 
     /**
      * 消息请求状态：失败

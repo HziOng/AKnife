@@ -1,7 +1,8 @@
 package org.aknife;
 
 import lombok.extern.java.Log;
-import org.aknife.business.base.controller.BaseController;
+import org.aknife.business.base.service.BaseService;
+import org.aknife.business.user.swing.SwingLoginForm;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.util.annotation.Operating;
 import org.springframework.context.ApplicationContext;
@@ -48,6 +49,7 @@ public class SystemInitializer {
     public SystemInitializer() {
         initSpring();
         initProtocol();
+        BaseService.jFrameStack.push(new SwingLoginForm());
     }
 
     /**

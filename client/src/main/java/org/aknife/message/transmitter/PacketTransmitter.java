@@ -28,14 +28,12 @@ public class PacketTransmitter {
 
     private static Channel channel;
 
-    private static User user;
 
     private PacketTransmitter(){
     }
 
-    public static void initTransmitter(Channel nowChannel, User nowUser){
+    public static void initTransmitter(Channel nowChannel){
         channel = nowChannel;
-        user=  nowUser;
     }
 
     public static void writePacket(Object o){

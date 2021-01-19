@@ -12,5 +12,11 @@ import java.util.Stack;
  */
 public interface BaseService {
 
-    Stack<JFrame> stack = new Stack<JFrame>();
+    String loginForm = "Login Example";
+
+    String registerForm = "Register Example";
+
+    String gameForm = "Game Example";
+
+    Stack<JFrame> jFrameStack = new Stack<JFrame>();
 }

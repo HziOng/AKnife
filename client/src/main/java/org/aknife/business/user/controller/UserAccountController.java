@@ -2,12 +2,14 @@ package org.aknife.business.user.controller;
 
 import lombok.extern.log4j.Log4j;
 import org.aknife.business.base.controller.BaseController;
-import org.aknife.business.user.model.User;
+import org.aknife.business.user.character.model.UserCharacter;
+import org.aknife.business.user.character.service.UserCharacterService;
 import org.aknife.business.user.packet.account.SM_UserLogin;
 import org.aknife.business.user.packet.account.SM_UserRegister;
 import org.aknife.business.user.service.UserAccountService;
-import org.aknife.business.user.swing.SwingInformationForm;
 import org.aknife.constant.ProtocolFixedData;
+import org.aknife.resource.ResourceManager;
+import org.aknife.resource.model.Location;
 import org.aknife.util.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,13 @@ public class UserAccountController extends BaseController {
 
     private UserAccountService userAccountService;
 
+    private UserCharacterService userCharacterService;
+
+    @Autowired
+    public void setUserCharacterService(UserCharacterService userCharacterService) {
+        this.userCharacterService = userCharacterService;
+    }
+
     @Autowired
     public void setUserAccountService(UserAccountService userAccountService) {
         this.userAccountService = userAccountService;
@@ -35,10 +44,18 @@ public class UserAccountController extends BaseController {
      */
     @Operating
     public int login(SM_UserLogin response){
-        user = new User(response.getUsername(),response.getPassword());
-        user.setUserID(response.getId());
-        System.out.println(user+"::"+response.getNews());
-        SwingInformationForm form = new SwingInformationForm();
+        if (response.getStatus() == ProtocolFixedData.STATUS_OK) {
+            UserCharacter character = new UserCharacter();
+            character.setUserName(response.getUsername());
+            character.setMapName(ResourceManager.getMapNameByID(response.getMapID()));
+            character.setLocation(new Location(10,10,0));
+            user.setUserID(response.getId());
+            user.setUsername(character.getUserName());
+            userAccountService.closeLoginSwing();
+            userCharacterService.toCharacterInfo(character);
+        }else {
+            userAccountService.loginFailure(response.getUsername(), response.getNews());
+        }
         return ProtocolFixedData.STATUS_OK;
     }
 
@@ -48,8 +65,12 @@ public class UserAccountController extends BaseController {
      */
     @Operating
     public int register(SM_UserRegister response){
-        user = new User(response.getUsername(),response.getPassword());
-        System.out.println(user+"::"+response.getData());
+        if (response.getStatus() == ProtocolFixedData.STATUS_OK) {
+            userAccountService.closeRegisterSwing();
+            userAccountService.toLoginSwing(response.getUsername());
+        }else {
+            userAccountService.registerFailure(response.getUsername(),response.getData());
+        }
         return ProtocolFixedData.STATUS_OK;
     }
 }

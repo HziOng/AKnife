@@ -34,7 +34,6 @@ public class UserUtil {
      * @return
      */
     public static int getUUID(){
-        int result = 0;
         DateFormat format = new SimpleDateFormat("yyMMddss");
         String formatDate = format.format(new Date());
         Integer nowTime = Integer.parseInt(formatDate);
@@ -43,5 +42,15 @@ public class UserUtil {
             number = 1;
         }
         return Integer.parseInt(""+formatDate+number++);
+    }
+
+    /**
+     * 通过用户ID和英雄ID为角色生成一个唯一ID
+     * @param userId
+     * @param heroId
+     * @return
+     */
+    public static int getCharacterId(int userId, int heroId){
+        return userId*3+heroId;
     }
 }

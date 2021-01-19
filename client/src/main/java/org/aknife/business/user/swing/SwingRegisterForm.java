@@ -25,6 +25,24 @@ public class SwingRegisterForm extends JFrame{
      */
     private Channel channel;
 
+    /**
+     * 用户信息显示
+     */
+    JTextField userText = new JTextField(20);
+
+    /**
+     * 用户错误信息显示
+     */
+    JLabel errorLabel = new JLabel("");
+
+    public void setUsername(String username){
+        userText.setText(username);
+    }
+
+    public void setError(String error){
+        errorLabel.setText(error);
+    }
+
     public SwingRegisterForm(Channel channel){
         // 设置窗体属性
         super("Register Example");
@@ -101,6 +119,12 @@ public class SwingRegisterForm extends JFrame{
             }
         });
         panel.add(loginButton);
+
+        /**
+         * 显示错误信息
+         */
+        errorLabel.setBounds(50,110,150,25);
+        panel.add(errorLabel);
 
     }
 

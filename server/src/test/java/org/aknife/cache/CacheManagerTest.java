@@ -1,22 +1,15 @@
 package org.aknife.cache;
 
+import org.aknife.business.user.character.model.UserCharacter;
 import org.aknife.business.user.entity.UserEntity;
-import org.aknife.business.user.manager.UserManager;
-import org.aknife.business.user.manager.impl.UserManagerImpl;
 import org.aknife.business.user.model.User;
+import org.aknife.business.user.util.UserUtil;
+import org.aknife.resource.model.Location;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
