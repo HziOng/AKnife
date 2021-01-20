@@ -1,6 +1,5 @@
 package org.aknife.cache;
 
-import org.aknife.dao.mysql.cache.CacheDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -51,7 +50,7 @@ public class CacheManager {
      */
     public <K extends Serializable,V> ConcurrentHashMap<K, V> getCache(Class clazz){
         if (!cache.containsKey(clazz)){
-            cache.put(clazz, new ConcurrentHashMap<K, V>());
+            cache.put(clazz, new ConcurrentHashMap<>());
         }
         return (ConcurrentHashMap<K, V>) cache.get(clazz);
     }

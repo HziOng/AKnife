@@ -8,10 +8,13 @@ import org.aknife.constant.PacketFixedConsts;
 import org.aknife.constant.ProtocolFixedData;
 import org.aknife.message.model.Message;
 import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.resource.ResourceManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -41,16 +44,40 @@ public class SwingGameForm extends JFrame{
      */
     private JTextField locationText = new JTextField(20);
 
-    public JTextField getUserText() {
-        return userText;
+    /**
+     * 显示图片
+     */
+    private JLabel image = new JLabel("");
+
+    /**
+     * 用户错误信息显示
+     */
+    JLabel errorLabel = new JLabel("");
+
+
+    public void setUserText(String data){
+        userText.setText(data);
     }
 
-    public JTextField getMapText() {
-        return mapText;
+    public void setMapText(String data){
+        mapText.setText(data);
     }
 
-    public JTextField getLocationText() {
-        return locationText;
+    public void setLocationText(String data){
+        locationText.setText(data);
+    }
+
+    public void setError(String error){
+        errorLabel.setText(error);
+    }
+
+    public void setMapImage(String url){
+        try {
+            Icon icon = new ImageIcon(new URL(url));
+            image.setIcon(icon);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     public SwingGameForm(){
@@ -100,12 +127,11 @@ public class SwingGameForm extends JFrame{
         locationText.setBounds(100,80,165,25);
         panel.add(locationText);
 
-
         /**
          * 操作按钮
          */
-        JButton switchMapButton = new JButton("切换地图");
-        switchMapButton.setBounds(135, 110, 80, 25);
+        JButton switchMapButton = new JButton("去恶人谷");
+        switchMapButton.setBounds(135, 110, 80, 40);
         switchMapButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,6 +141,17 @@ public class SwingGameForm extends JFrame{
             }
         });
         panel.add(switchMapButton);
+
+        /**
+         * 显示错误信息
+         */
+        errorLabel.setBounds(50,140,300,25);
+        panel.add(errorLabel);
+        /**
+         * 显示地图图片
+         */
+        image.setBounds(160,160, 800,600);
+        panel.add(image);
     }
 
     public boolean checkInputDateFormat(){

@@ -1,7 +1,5 @@
 package org.aknife.dao.mysql.user;
 
-import org.aknife.business.user.character.entity.UserCharacterEntity;
-import org.aknife.dao.mysql.BaseMySqlDao;
 import org.aknife.dao.mysql.HibernateRealizationDao;
 
 /**

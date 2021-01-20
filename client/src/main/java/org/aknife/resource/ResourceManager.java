@@ -31,4 +31,8 @@ public class ResourceManager {
     public static String getMapNameByID(int mapID){
         return terrainMap.get(mapID).getName();
     }
+
+    public static String getMapImageUrlByID(int mapID){
+        return terrainMap.get(mapID).getUrl();
+    }
 }

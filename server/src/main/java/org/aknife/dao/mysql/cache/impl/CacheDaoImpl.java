@@ -1,7 +1,7 @@
 package org.aknife.dao.mysql.cache.impl;
 
 import lombok.extern.log4j.Log4j;
-import org.aknife.dao.mysql.cache.CacheDao;
+import org.aknife.cache.CacheDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate5.HibernateTemplate;

@@ -5,7 +5,7 @@ import org.aknife.business.user.model.User;
 import org.aknife.business.base.packet.Packet;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,19 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BaseController {
 
-    private Message message;
-
-    private PacketTransmitter transmitter = PacketTransmitter.getInstance();;
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
-
-    private ConcurrentHashMap<Channel, User> userChannel = null;
+    private PacketTransmitterUtil transmitter = PacketTransmitterUtil.getInstance();;
 
     public int getClassCode(Class clazz){
         return PacketFixedConsts.getCodeByClass(clazz);

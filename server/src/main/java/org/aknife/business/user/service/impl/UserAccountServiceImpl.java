@@ -1,8 +1,8 @@
 package org.aknife.business.user.service.impl;
 
 import lombok.extern.java.Log;
-import org.aknife.business.user.character.manager.CharacterManager;
-import org.aknife.business.user.character.model.UserCharacter;
+import org.aknife.business.character.manager.CharacterManager;
+import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.user.manager.UserManager;
 import org.aknife.business.user.util.UserUtil;
 import org.aknife.business.user.constant.UserStatusConsts;
@@ -56,6 +56,7 @@ public class UserAccountServiceImpl implements IUserAccountService {
         operaUser.setCharacterId(character.getId());
         operaUser.getCharacterIds().add(character.getId());
         userManager.addUser(operaUser);
+        characterManager.addCharacter(character);
         return ProtocolFixedData.STATUS_OK;
     }
 

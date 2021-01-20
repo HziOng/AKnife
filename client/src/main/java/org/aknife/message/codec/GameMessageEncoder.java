@@ -24,7 +24,6 @@ public class GameMessageEncoder extends MessageToMessageEncoder<Message> {
         // 向协议内容中添加请求头
         buf.writeInt(ProtocolFixedData.PACKAGE_HEADER);
         buf.writeInt(message.getType());
-        buf.writeInt(message.getStatus());
         buf.writeInt((int) message.getDate().getTime());
         buf.writeInt(data.length);
         buf.writeBytes(data);

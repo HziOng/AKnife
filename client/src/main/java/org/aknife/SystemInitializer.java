@@ -4,7 +4,7 @@ import lombok.extern.java.Log;
 import org.aknife.business.base.service.BaseService;
 import org.aknife.business.user.swing.SwingLoginForm;
 import org.aknife.constant.PacketFixedConsts;
-import org.aknife.util.annotation.Operating;
+import org.aknife.connection.annotation.Operating;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;

@@ -27,7 +27,6 @@ public class GameMessageDecoder extends ByteToMessageDecoder {
             Message message = new Message();
 
             message.setType(in.readInt());
-            message.setStatus(in.readInt());
             message.setDate(new Date((in.readUnsignedInt() - 2208988800L) * 1000L));
             message.setSize(in.readInt());
 

@@ -2,13 +2,16 @@ package org.aknife.business.user.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * @ClassName User
  * @Author HeZiLong
  * @Data 2021/1/11 11:34
  */
 @Data
-public class User {
+public class User implements Serializable {
 
     private Integer userID;
 
@@ -16,19 +19,23 @@ public class User {
 
     private String password;
 
-    public User(){}
+    /**
+     * 默认使用的角色
+     */
+    private int characterId;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    /**
+     * 用户状态：上线还是下线
+     */
+    private int status;
+
+    private ArrayList<Integer> characterIds = new ArrayList<>();
+
+    public User() {
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userID=" + userID +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
     }
 }

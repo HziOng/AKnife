@@ -7,8 +7,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.aknife.handler.GameServerInitializer;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.connection.handler.GameServerInitializer;
+import org.aknife.connection.initializer.SystemInitializer;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 
 import java.net.InetSocketAddress;
 
@@ -33,7 +34,7 @@ public class GameServer {
         EventLoopGroup work = new NioEventLoopGroup();
         try {
             SystemInitializer systemInitializer = new SystemInitializer();
-            PacketTransmitter.initTransmitter(systemInitializer);
+            PacketTransmitterUtil.initTransmitter(systemInitializer);
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(boss,work)
                     .handler(new LoggingHandler(LogLevel.DEBUG))

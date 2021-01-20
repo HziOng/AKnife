@@ -1,12 +1,9 @@
 package org.aknife.business.user.model;
 
 import lombok.Data;
-import org.aknife.business.user.character.model.UserCharacter;
-import org.aknife.resource.model.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @ClassName User

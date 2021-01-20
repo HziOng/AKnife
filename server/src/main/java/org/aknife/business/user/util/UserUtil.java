@@ -27,6 +27,8 @@ public class UserUtil {
         toUser.setUserID(fromUser.getUserID());
         toUser.setUsername(fromUser.getUsername());
         toUser.setPassword(fromUser.getPassword());
+        toUser.setCharacterId(fromUser.getCharacterId());
+        toUser.setCharacterIds(fromUser.getCharacterIds());
     }
 
     /**

@@ -1,10 +1,6 @@
 package org.aknife.cache;
 
-import org.aknife.business.user.character.model.UserCharacter;
 import org.aknife.business.user.entity.UserEntity;
-import org.aknife.business.user.model.User;
-import org.aknife.business.user.util.UserUtil;
-import org.aknife.resource.model.Location;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

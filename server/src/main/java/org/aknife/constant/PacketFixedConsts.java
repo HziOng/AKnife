@@ -1,8 +1,8 @@
 package org.aknife.constant;
 
 import org.aknife.business.user.packet.*;
-import org.aknife.business.user.character.packet.CM_SwitchMap;
-import org.aknife.business.user.character.packet.SM_SwitchMap;
+import org.aknife.business.character.packet.CM_SwitchMap;
+import org.aknife.business.character.packet.SM_SwitchMap;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -64,8 +64,14 @@ public class PacketFixedConsts {
 
         // 以下部分为用户角色操作协议========================================================================
 
+        /**
+         * 用户切换地图响应协议
+         */
         SM_SWITCHMAP(400, SM_SwitchMap.class),
 
+        /**
+         * 用户切换地图请求协议
+         */
         CM_SWITCHMAP(401, CM_SwitchMap.class);
 
 

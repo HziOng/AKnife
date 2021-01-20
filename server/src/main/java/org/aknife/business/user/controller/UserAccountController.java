@@ -2,14 +2,14 @@ package org.aknife.business.user.controller;
 
 import lombok.extern.java.Log;
 import org.aknife.business.base.controller.BaseController;
-import org.aknife.business.user.character.model.UserCharacter;
-import org.aknife.business.user.character.service.IUserCharacterService;
+import org.aknife.business.character.model.UserCharacter;
+import org.aknife.business.character.service.IUserCharacterService;
 import org.aknife.business.user.packet.*;
 import org.aknife.constant.ProtocolFixedData;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.user.model.User;
 import org.aknife.business.user.service.IUserAccountService;
-import org.aknife.util.annotation.Operating;
+import org.aknife.connection.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

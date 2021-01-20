@@ -5,9 +5,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.aknife.handler.AbstractClientHandler;
-import org.aknife.handler.GameClientInitializer;
-import org.aknife.business.user.swing.SwingLoginForm;
+import org.aknife.connection.handler.AbstractClientHandler;
+import org.aknife.connection.handler.GameClientInitializer;
 import org.aknife.message.transmitter.PacketTransmitter;
 
 /**
