@@ -24,7 +24,7 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
     /**
      * 存储协议类型和调用的service方法的映射关系
      */
-    private ConcurrentHashMap<Integer, Method> protocolMap = new ConcurrentHashMap();
+    private SystemInitializer initializer;
 
     /**
      * 存放协议编码和协议对象的映射关系
@@ -37,12 +37,11 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
     private ApplicationContext ioc = null;
 
     public GameServerInitializer() {
-        protocolMap = new ConcurrentHashMap<>();
-        classMap = new ConcurrentHashMap<>();
+        initializer = new SystemInitializer();
     }
 
     public GameServerInitializer(SystemInitializer systemInitializer) {
-        this.protocolMap = systemInitializer.getProtocolMap();
+        this.initializer = systemInitializer;
         this.ioc = systemInitializer.getIoc();
     }
 
@@ -54,7 +53,7 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("decoder", new GameMessageDecoder());
         pipeline.addLast("encoder", new GameMessageEncoder());
         pipeline.addLast("heartBeatHandler", new HeartBeatServerHandler(classMap, ioc));
-        pipeline.addLast("controlHandler", new GameServerControlHandler(protocolMap, classMap, ioc));
+        pipeline.addLast("controlHandler", new GameServerControlHandler(initializer, classMap, ioc));
 
     }
 

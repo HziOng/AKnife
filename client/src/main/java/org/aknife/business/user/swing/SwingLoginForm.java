@@ -3,7 +3,7 @@ package org.aknife.business.user.swing;
 import io.netty.channel.Channel;
 import org.aknife.business.base.service.BaseService;
 import org.aknife.business.user.model.User;
-import org.aknife.business.user.packet.account.CM_UserLogin;
+import org.aknife.business.user.packet.CM_UserLogin;
 import org.aknife.message.transmitter.PacketTransmitter;
 
 import javax.swing.*;

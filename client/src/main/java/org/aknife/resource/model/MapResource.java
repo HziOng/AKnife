@@ -1,6 +1,7 @@
 package org.aknife.resource.model;
 
 import lombok.Data;
+import org.aknife.business.map.model.NpcCharacter;
 
 import java.util.HashMap;
 

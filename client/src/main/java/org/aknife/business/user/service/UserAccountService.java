@@ -1,8 +1,12 @@
 package org.aknife.business.user.service;
 
 import org.aknife.business.base.service.BaseService;
+import org.aknife.business.character.model.UserCharacter;
+import org.aknife.business.map.model.Location;
 import org.aknife.business.user.model.User;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 /**
  * @ClassName UserAccountService
@@ -11,6 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface UserAccountService extends BaseService {
+
+    void updateUser(User user, int mapID, int characterId);
 
     /**
      * 用户登录失败后的客户端操作
@@ -41,4 +47,10 @@ public interface UserAccountService extends BaseService {
      * 关闭注册界面
      */
     void closeRegisterSwing();
+
+    /**
+     * 获取用户的默认角色
+     * @return
+     */
+    UserCharacter getInitCharacter();
 }

@@ -1,6 +1,6 @@
 package org.aknife.resource;
 
-import org.aknife.resource.model.MapResource;
+import org.aknife.business.map.entity.GameMapEntity;
 
 import java.util.HashMap;
 
@@ -14,19 +14,8 @@ public class ResourceManager {
     /**
      * 地形地图
      */
-    private static HashMap<Integer, MapResource> terrainMap = null;
+    private static HashMap<Integer, GameMapEntity> terrainMap = null;
 
-    /**
-     * 用于加载配置资源
-     */
-    private static ResourceLoader loader = new ResourceLoader();
-
-    static {
-        // 加载地图配置资源
-        terrainMap = ResourceLoader.loadMapInfo();
-        // 加载NPC配置资源
-        ResourceLoader.loadNpcInfo();
-    }
 
     public static String getMapNameByID(int mapID){
         return terrainMap.get(mapID).getName();
@@ -34,5 +23,9 @@ public class ResourceManager {
 
     public static String getMapImageUrlByID(int mapID){
         return terrainMap.get(mapID).getUrl();
+    }
+
+    public static void setTerrainMap(HashMap<Integer, GameMapEntity> terrainMap) {
+        ResourceManager.terrainMap = terrainMap;
     }
 }

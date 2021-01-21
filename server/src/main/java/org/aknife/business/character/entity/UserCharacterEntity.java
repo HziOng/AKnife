@@ -43,6 +43,7 @@ public class UserCharacterEntity {
 
     public void setCharacter(UserCharacter character) {
         this.id = character.getId();
+        this.userId = character.getUserId();
         data = JSON.toJSONString(character);
         this.character = character;
     }

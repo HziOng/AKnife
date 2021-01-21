@@ -12,8 +12,4 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BaseController {
 
-    protected static User user = new User();
-
-    protected static ConcurrentHashMap<Integer, UserCharacter> characters = new ConcurrentHashMap<>();
-
 }

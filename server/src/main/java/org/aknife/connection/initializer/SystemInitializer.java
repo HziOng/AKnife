@@ -26,10 +26,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Log
 public class SystemInitializer {
 
+    // 存储协议类型和调用的service方法的映射关系
     /**
-     * 存储协议类型和调用的service方法的映射关系
+     * 协议中独自运行的方法
      */
-    private ConcurrentHashMap<Integer, Method> protocolMap = new ConcurrentHashMap();
+    private ConcurrentHashMap<Integer, Method> protocolUniqueMap = new ConcurrentHashMap();
+    /**
+     * 协议中需要跨用户的方法
+     */
+    private ConcurrentHashMap<Integer, Method> protocolCommonMap = new ConcurrentHashMap();
 
 
     /**
@@ -95,7 +100,11 @@ public class SystemInitializer {
                                 continue;
                             }
                             int packetCode = PacketFixedConsts.getCodeByClass(paramClass[1]);
-                            protocolMap.put(packetCode, method);
+                            if ("unique".equals(methodAnnotation.type())){
+                                protocolUniqueMap.put(packetCode, method);
+                            }else {
+                                protocolCommonMap.put(packetCode, method);
+                            }
                         }
                     }
                 }
@@ -107,10 +116,13 @@ public class SystemInitializer {
 
 
 
-    public ConcurrentHashMap<Integer, Method> getProtocolMap() {
-        return protocolMap;
+    public ConcurrentHashMap<Integer, Method> getProtocolUniqueMap() {
+        return protocolUniqueMap;
     }
 
+    public ConcurrentHashMap<Integer, Method> getProtocolCommonMap() {
+        return protocolCommonMap;
+    }
 
     public ApplicationContext getIoc() {
         return ioc;

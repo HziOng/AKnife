@@ -2,10 +2,9 @@ package org.aknife.resource;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j;
-import org.aknife.resource.model.Location;
+import org.aknife.business.map.model.Location;
 import org.aknife.resource.model.MapResource;
 import org.aknife.resource.model.NpcCharacter;
-import org.apache.poi.ss.extractor.ExcelExtractor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

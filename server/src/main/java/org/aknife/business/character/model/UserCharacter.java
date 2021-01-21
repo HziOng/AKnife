@@ -1,7 +1,7 @@
 package org.aknife.business.character.model;
 
 import lombok.Data;
-import org.aknife.resource.model.Location;
+import org.aknife.business.map.model.Location;
 
 /**
  * 用户角色
@@ -13,6 +13,8 @@ import org.aknife.resource.model.Location;
 public class UserCharacter {
 
     private int id;
+
+    private int userId;
 
     private int mapID;
 

@@ -29,9 +29,6 @@ public class PacketTransmitterUtil {
 
     private static ConcurrentHashMap<Integer, Channel> userChannel = new ConcurrentHashMap<>();
 
-    private static ConcurrentHashMap<Integer, Method> protocolMap = null;
-
-
     private PacketTransmitterUtil(){
     }
 
@@ -40,7 +37,6 @@ public class PacketTransmitterUtil {
         for (Channel channel : channelUser.keySet()){
             PacketTransmitterUtil.userChannel.put(channelUser.get(channel).getUserID(), channel);
         }
-        protocolMap = initializer.getProtocolMap();
     }
 
     public void writePacket(User user, Object o){

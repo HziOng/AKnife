@@ -1,8 +1,14 @@
 package org.aknife.constant;
 
-import org.aknife.business.user.packet.*;
+
 import org.aknife.business.character.packet.CM_SwitchMap;
 import org.aknife.business.character.packet.SM_SwitchMap;
+
+import org.aknife.business.map.packet.SM_MoveLocation;
+import org.aknife.business.map.packet.SM_OtherUserAwayMap;
+import org.aknife.business.map.packet.SM_OtherUserEntryMap;
+import org.aknife.business.map.packet.CM_MoveLocation;
+import org.aknife.business.user.packet.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,43 +42,64 @@ public class PacketFixedConsts {
         /**
          * 登录
          */
-        CM_USERLOGIN(333, CM_UserLogin.class),
+        CM_USER_LOGIN(333, CM_UserLogin.class),
         /**
          * 注册
          */
-        CM_USERREGISTER(222, CM_UserRegister.class),
+        CM_USER_REGISTER(222, CM_UserRegister.class),
 
         /**
          * 断开连接
          */
-        CM_USERCLOSECONNECTION(111, CM_UserOffLine.class),
+        CM_USER_CLOSE_CONNECTION(111, CM_UserOffLine.class),
 
         /**
          * 心跳协议
          */
-        CM_USERHEART(000, CM_UserHeart.class),
+        CM_USER_HEART(000, CM_UserHeart.class),
 
         /**
          * 用户登录响应
          */
-        SM_USERLOGIN(334, SM_UserLogin.class),
+        SM_USER_LOGIN(334, SM_UserLogin.class),
 
         /**
          * 用户注册响应
          */
-        SM_USERREGISTER(224, SM_UserRegister.class),
+        SM_USER_REGISTER(224, SM_UserRegister.class),
 
         // 以下部分为用户角色操作协议========================================================================
 
         /**
-         * 用户切换地图响应协议
+         * 用户切换地图响应
          */
-        SM_SWITCHMAP(400, SM_SwitchMap.class),
+        SM_SWITCH_MAP(400, SM_SwitchMap.class),
 
         /**
-         * 用户切换地图请求协议
+         * 用户切换地图请求
          */
-        CM_SWITCHMAP(401, CM_SwitchMap.class);
+        CM_SWITCH_MAP(401, CM_SwitchMap.class),
+
+        /**
+         * 用户移动请求
+         */
+        CM_MOVE_LOCATION(501, CM_MoveLocation.class),
+
+        /**
+         * 用户移动响应
+         */
+        SM_MOVE_LOCATION(502, SM_MoveLocation.class),
+
+        /**
+         * 其他用户进入地图之后通知其他用户的客户端
+         */
+        SM_OTHER_USER_ENTRY_MAP(503, SM_OtherUserEntryMap.class),
+
+        /**
+         * 其他用户离开地图之后通知其他用户的客户端
+         */
+        SM_OTHER_USER_AWAY_MAP(504,SM_OtherUserAwayMap.class);
+
 
 
 
@@ -97,7 +124,7 @@ public class PacketFixedConsts {
         if (packetCodeMap.containsKey(clazz)){
             return packetCodeMap.get(clazz);
         }
-        throw new RuntimeException("不包含该协议中不包含"+clazz);
+        throw new RuntimeException("不包含该协议! 不包含"+clazz);
     }
 
     public static Class getClassByType(int type){

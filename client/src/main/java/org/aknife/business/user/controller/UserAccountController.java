@@ -4,11 +4,12 @@ import lombok.extern.log4j.Log4j;
 import org.aknife.business.base.controller.BaseController;
 import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.character.service.UserCharacterService;
-import org.aknife.business.user.packet.account.SM_UserLogin;
-import org.aknife.business.user.packet.account.SM_UserRegister;
+import org.aknife.business.map.service.IGameMapService;
+import org.aknife.business.user.model.User;
+import org.aknife.business.user.packet.SM_UserLogin;
+import org.aknife.business.user.packet.SM_UserRegister;
 import org.aknife.business.user.service.UserAccountService;
 import org.aknife.constant.ProtocolFixedData;
-import org.aknife.resource.model.Location;
 import org.aknife.connection.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,13 @@ public class UserAccountController extends BaseController {
 
     private UserCharacterService userCharacterService;
 
+    private IGameMapService gameMapService;
+
+    @Autowired
+    public void setGameMapService(IGameMapService gameMapService) {
+        this.gameMapService = gameMapService;
+    }
+
     @Autowired
     public void setUserCharacterService(UserCharacterService userCharacterService) {
         this.userCharacterService = userCharacterService;
@@ -44,14 +52,11 @@ public class UserAccountController extends BaseController {
     @Operating
     public int login(SM_UserLogin response){
         if (response.getStatus() == ProtocolFixedData.STATUS_OK) {
-            UserCharacter character = new UserCharacter();
-            character.setUsername(response.getUsername());
-            character.setMapID(response.getMapID());
-            character.setLocation(new Location(10,10,0));
-            user.setUserID(response.getId());
-            user.setUsername(character.getUsername());
+            User now = new User(response.getId(), response.getUsername(), response.getCharacterId(), response.getCharacterIds());
+            userAccountService.updateUser(now, response.getMapID(), response.getCharacterId());
             userAccountService.closeLoginSwing();
-            userCharacterService.toCharacterInfo(character);
+            userCharacterService.toCharacterInfo(userAccountService.getInitCharacter());
+            gameMapService.switchMapAllCharacterFromUser(response.getMapID());
         }else {
             userAccountService.loginFailure(response.getUsername(), response.getNews());
         }

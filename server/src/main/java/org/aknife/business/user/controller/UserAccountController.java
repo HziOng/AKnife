@@ -56,9 +56,8 @@ public class UserAccountController extends BaseController {
             // 加载角色信息
             UserCharacter character = userCharacterService.getInitCharacter(operaUser);
             // 发送响应
-            SM_UserLogin response = new SM_UserLogin(operaUser.getUserID(), operaUser.getUsername(),
-                    character.getMapID(),
-                    ProtocolFixedData.STATUS_OK,
+            SM_UserLogin response = new SM_UserLogin(operaUser.getUserID(), operaUser.getUsername(), operaUser.getCharacterId(),
+                    character.getMapID(), ProtocolFixedData.STATUS_OK, operaUser.getCharacterIds(),
                     "login successful");
             writePacket(operaUser, response);
         } catch (GlobalException e){

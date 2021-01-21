@@ -1,16 +1,12 @@
 package org.aknife.business.user.swing;
 
 import io.netty.channel.Channel;
-import org.aknife.constant.PacketFixedConsts;
-import org.aknife.message.model.Message;
-import org.aknife.business.user.packet.account.CM_UserRegister;
-import org.aknife.constant.ProtocolFixedData;
+import org.aknife.business.user.packet.CM_UserRegister;
 import org.aknife.message.transmitter.PacketTransmitter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 /**
  * 用户注册-图形化界面客户端

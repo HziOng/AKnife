@@ -1,7 +1,7 @@
 package org.aknife.business.character.model;
 
 import lombok.Data;
-import org.aknife.resource.model.Location;
+import org.aknife.business.map.model.Location;
 
 /**
  * @ClassName UserCharacter
@@ -19,4 +19,10 @@ public class UserCharacter {
 
     private Location location;
 
+    public UserCharacter(int id, String username, int mapID, Location location) {
+        this.id = id;
+        this.username = username;
+        this.mapID = mapID;
+        this.location = location;
+    }
 }

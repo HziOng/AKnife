@@ -1,7 +1,7 @@
 package org.aknife.resource.util;
 
 import com.alibaba.fastjson.JSONObject;
-import org.aknife.resource.model.Location;
+import org.aknife.business.map.model.Location;
 
 import java.util.HashMap;
 

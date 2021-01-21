@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName User
@@ -29,9 +30,16 @@ public class User implements Serializable {
      */
     private int status;
 
-    private ArrayList<Integer> characterIds = new ArrayList<>();
+    private List<Integer> characterIds = new ArrayList<>();
 
     public User() {
+    }
+
+    public User(int userID, String username, int characterId, List<Integer> characterIds) {
+        this.userID = userID;
+        this.username = username;
+        this.characterId = characterId;
+        this.characterIds = characterIds;
     }
 
     public User(String username, String password){

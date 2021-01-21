@@ -1,5 +1,7 @@
 package org.aknife.business.map.service;
 
+import org.aknife.business.character.model.UserCharacter;
+import org.aknife.business.map.model.Location;
 import org.aknife.business.user.model.User;
 
 /**
@@ -16,4 +18,15 @@ public interface IGameMapService {
      * @param toMapId 要去的地图ID
      */
     void broadcastSwitchMap(User operaUser, int toMapId);
+
+
+    /**
+     * 指定用户的指定角色前往指定位置
+     *
+     * @param operaUser
+     * @param characterId
+     * @param toLocation
+     * @return
+     */
+    void moveLocation(User operaUser, int characterId, Location toLocation);
 }

@@ -2,9 +2,10 @@ package org.aknife.business.user.packet;
 
 import lombok.Data;
 import org.aknife.business.base.packet.Packet;
-import org.aknife.resource.model.Location;
+import org.aknife.business.map.model.Location;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 用户登录响应
@@ -22,14 +23,19 @@ public class SM_UserLogin extends Packet {
     private String username;
 
     /**
+     * 用户默认使用的角色
+     */
+    private int characterId;
+
+    /**
      * 用户角色所在地图
      */
     private int mapID;
 
     /**
-     * 用户角色所在位置
+     * 该用户的所有角色
      */
-    private HashMap<Integer, Location> locations = new HashMap<>();
+    private List<Integer> characterIds;
 
     /**
      * 表示请求状态
@@ -44,16 +50,18 @@ public class SM_UserLogin extends Packet {
     public SM_UserLogin() {
     }
 
-    public SM_UserLogin(String username, int status, String news) {
-        this.username = username;
-        this.status = status;
-        this.news = news;
-    }
-
-    public SM_UserLogin(int id, String username, int mapID,int status, String news) {
+    public SM_UserLogin(int id, String username,int characterId, int mapID, int status, List<Integer> characterIds,  String news) {
         this.id = id;
         this.username = username;
+        this.characterId  = characterId;
         this.mapID = mapID;
+        this.status = status;
+        this.news = news;
+        this.characterIds = characterIds;
+    }
+
+    public SM_UserLogin(String username ,int status, String news) {
+        this.username = username;
         this.status = status;
         this.news = news;
     }

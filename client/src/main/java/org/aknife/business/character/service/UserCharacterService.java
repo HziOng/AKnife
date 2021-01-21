@@ -18,16 +18,5 @@ public interface UserCharacterService extends BaseService {
      */
     void toCharacterInfo(UserCharacter character);
 
-    /**
-     * 将用户user的所有角色都送到toMapID地图去
-     * @param user
-     * @param toMapID
-     */
-    void switchMapAllCharacterFromUser(User user, int toMapID);
 
-    /**
-     * 切换地图失败的信息回显
-     * @param message
-     */
-    void switchMapFailure(String message);
 }

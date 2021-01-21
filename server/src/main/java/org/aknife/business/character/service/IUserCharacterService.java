@@ -1,7 +1,10 @@
 package org.aknife.business.character.service;
 
 import org.aknife.business.character.model.UserCharacter;
+import org.aknife.business.map.model.Location;
 import org.aknife.business.user.model.User;
+
+import java.util.HashMap;
 
 /**
  * @ClassName UserCharacterService
@@ -30,4 +33,11 @@ public interface IUserCharacterService {
      * @return
      */
     UserCharacter getInitCharacter(User operaUser);
+
+    /**
+     * 获取用户所有角色的位置
+     * @param operaUser
+     * @return
+     */
+    HashMap<Integer, Location> getLocationFromUser(User operaUser);
 }

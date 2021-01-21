@@ -40,7 +40,7 @@ public class PacketTransmitter {
         if (channel == null){
             throw new GlobalException("该通道已断开");
         }
-        Message message = new Message(PacketFixedConsts.getCodeByClass(o.getClass()), ProtocolFixedData.STATUS_OK, new Date(), o);
+        Message message = new Message(PacketFixedConsts.getCodeByClass(o.getClass()), new Date(), o);
         channel.writeAndFlush(message);
     }
 }
