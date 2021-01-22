@@ -7,6 +7,8 @@ import org.aknife.resource.util.ExcelUtil;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName GameMapManagerImpl
@@ -32,12 +34,17 @@ public class GameMapManagerImpl implements GameMapManager {
     }
 
     @Override
-    public GameMap getGameMapById(int mapId){
+    public GameMap getGameMapById(int mapId) {
         GameMapEntity entity = mapResources.get(mapId);
-        if (entity == null){
+        if (entity == null) {
             return null;
         }
         return GameMapUtil.entityToGameMap(entity);
+    }
+
+    @Override
+    public Set<Integer> getAllGameMapId() {
+        return mapResources.keySet();
     }
 
     public static void main(String[] args) {

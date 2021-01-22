@@ -5,6 +5,7 @@ import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.map.packet.SM_OtherUserAwayMap;
 import org.aknife.business.map.packet.SM_OtherUserEntryMap;
 import org.aknife.business.map.service.IGameMapService;
+import org.aknife.business.user.model.User;
 import org.aknife.connection.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,8 +32,9 @@ public class GameMapController extends BaseController {
      */
     @Operating
     public void otherUserEntryMap(SM_OtherUserEntryMap response){
+        User user = new User(response.getUserId(), response.getUsername(), response.getCharacterIds());
         try {
-            gameMapService.userEntryMap(response.getUserId(), response.getUsername(), response.getCharacterId());
+            gameMapService.otherUserEntryMap(user);
         } catch (GlobalException e){
             e.printStackTrace();
         }
@@ -45,7 +47,7 @@ public class GameMapController extends BaseController {
     @Operating
     public void otherUserAwayMap(SM_OtherUserAwayMap response){
         try {
-            gameMapService.userGoAwayMap(response.getUserId(), response.getUsername());
+            gameMapService.otherUserGoAwayMap(response.getUserId());
         } catch (GlobalException e){
             e.printStackTrace();
         }

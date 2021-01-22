@@ -25,6 +25,7 @@ public class UserUtil {
      */
     public static void userCopyToUser(User fromUser, User toUser){
         toUser.setUserID(fromUser.getUserID());
+        toUser.setMapId(fromUser.getMapId());
         toUser.setUsername(fromUser.getUsername());
         toUser.setPassword(fromUser.getPassword());
         toUser.setCharacterId(fromUser.getCharacterId());

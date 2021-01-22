@@ -50,6 +50,7 @@ public class UserAccountController extends BaseController {
             int interimID = operaUser.getUserID();
             operaUser.setUsername(data.getUsername());
             operaUser.setPassword(data.getPassword());
+            operaUser.setMapId(0);
             // 进行登录业务
             userAccountService.login(operaUser);
             updatePacketTransmitter(interimID, operaUser.getUserID());
@@ -57,7 +58,7 @@ public class UserAccountController extends BaseController {
             UserCharacter character = userCharacterService.getInitCharacter(operaUser);
             // 发送响应
             SM_UserLogin response = new SM_UserLogin(operaUser.getUserID(), operaUser.getUsername(), operaUser.getCharacterId(),
-                    character.getMapID(), ProtocolFixedData.STATUS_OK, operaUser.getCharacterIds(),
+                    operaUser.getMapId(), ProtocolFixedData.STATUS_OK, operaUser.getCharacterIds(),
                     "login successful");
             writePacket(operaUser, response);
         } catch (GlobalException e){

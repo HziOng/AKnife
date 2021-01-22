@@ -27,22 +27,6 @@ public class UserCharacterServiceImpl implements IUserCharacterService {
         this.characterManager = characterManager;
     }
 
-    @Override
-    public void switchMapAllCharacter(User operaUser, int toMapId) {
-        ConcurrentHashMap<Integer, UserCharacter> characterMap = characterManager.getCharacterByUserId(operaUser);
-        if (characterMap == null){
-            throw new GlobalException("异常，用户未拥有角色");
-        }
-        for (UserCharacter character : characterMap.values()){
-            character.setMapID(toMapId);
-        }
-    }
-
-    @Override
-    public void switchMap(UserCharacter character, int toMapId) {
-        character.setMapID(toMapId);
-        characterManager.updateCharacter(character);
-    }
 
     @Override
     public UserCharacter getInitCharacter(User operaUser) {

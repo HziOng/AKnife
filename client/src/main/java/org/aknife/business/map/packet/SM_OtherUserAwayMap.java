@@ -3,8 +3,6 @@ package org.aknife.business.map.packet;
 import lombok.Data;
 import org.aknife.business.base.packet.Packet;
 
-import java.util.List;
-
 /**
  * 当其他角色离开地图，发送该协议给地图中其他角色
  * @ClassName CM_OtherUserSwitchMap
@@ -15,12 +13,11 @@ import java.util.List;
 public class SM_OtherUserAwayMap extends Packet {
 
     /**
-     * 要离开的用户ID
+     * 要操作的用户名
      */
     private int userId;
 
-    /**
-     * 要离开的用户的用户名
-     */
-    private String username;
+    public SM_OtherUserAwayMap(int userId) {
+        this.userId = userId;
+    }
 }

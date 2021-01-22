@@ -27,17 +27,14 @@ public interface IGameMapService extends BaseService {
 
 
     /**
-     * 用户离开本地图
+     * 其他用户离开本地图
      * @param userId
-     * @param username
      */
-    void userGoAwayMap(int userId, String username);
+    void otherUserGoAwayMap(int userId);
 
     /**
-     * 用户进入本地图
-     * @param userId
-     * @param username
-     * @param characterId
+     * 其他用户进入本地图
+     * @param other
      */
-    void userEntryMap(int userId, int username, List<Integer> characterId);
+    void otherUserEntryMap(User other);
 }

@@ -1,5 +1,6 @@
 package org.aknife.connection.thread;
 
+import java.util.HashMap;
 import java.util.concurrent.*;
 
 /**
@@ -13,22 +14,20 @@ public class CommonOperationThreadUtil {
     /**
      * 核心线程数
      */
-    private static final int CORE_POOL_SIZE = 20;
+    private static final int CORE_POOL_SIZE = 8;
 
-    private static final int MAX_MUN_POOL_SIZE = 50;
+    private static final int MAX_MUN_POOL_SIZE = 20;
 
-    private static ExecutorService executor;
+    private static final ExecutorService[] executors = new ExecutorService[CORE_POOL_SIZE];
 
     static {
-        BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
-        executor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_MUN_POOL_SIZE,
-                60,
-                TimeUnit.SECONDS,
-                queue
-        );
+        for (int i=0;i<CORE_POOL_SIZE;i++){
+            executors[i] = Executors.newSingleThreadExecutor();
+        }
     }
 
-    public static void runTask(Runnable task){
+    public static void runTask(int id, Runnable task){
+        ExecutorService executor = executors[id % CORE_POOL_SIZE];
         executor.execute(task);
     }
 }

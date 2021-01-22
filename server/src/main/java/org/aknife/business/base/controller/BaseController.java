@@ -23,7 +23,7 @@ public class BaseController {
     }
 
     public void writePacket(User operaUser, Packet packet){
-        transmitter.writePacket(operaUser,packet);
+        PacketTransmitterUtil.writePacket(operaUser,packet);
     }
 
     /**

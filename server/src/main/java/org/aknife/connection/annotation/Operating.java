@@ -13,5 +13,4 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 public @interface Operating {
-    String type() default "unique";
 }

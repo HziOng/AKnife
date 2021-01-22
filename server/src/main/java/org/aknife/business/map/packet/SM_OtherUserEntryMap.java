@@ -13,12 +13,11 @@ import org.aknife.business.base.packet.Packet;
 public class SM_OtherUserEntryMap extends Packet {
 
     /**
-     * 要操作的用户名
+     * 要操作的用户ID
      */
-    private int username;
+    private int userId;
 
-    /**
-     * 要操作的用户角色
-     */
-    private int characterId;
+    public SM_OtherUserEntryMap(int userId) {
+        this.userId = userId;
+    }
 }

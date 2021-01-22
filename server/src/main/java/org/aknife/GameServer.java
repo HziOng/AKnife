@@ -33,13 +33,12 @@ public class GameServer {
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup work = new NioEventLoopGroup();
         try {
-            SystemInitializer systemInitializer = new SystemInitializer();
-            PacketTransmitterUtil.initTransmitter(systemInitializer);
+            PacketTransmitterUtil.initTransmitter();
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(boss,work)
                     .handler(new LoggingHandler(LogLevel.DEBUG))
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new GameServerInitializer(systemInitializer));
+                    .childHandler(new GameServerInitializer());
 
             ChannelFuture f = bootstrap.bind(new InetSocketAddress(port)).sync();
             System.out.println(" server start up on port : " + port);

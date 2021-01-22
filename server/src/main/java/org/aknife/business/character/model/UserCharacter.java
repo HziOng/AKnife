@@ -16,8 +16,6 @@ public class UserCharacter {
 
     private int userId;
 
-    private int mapID;
-
     private Location location;
 
 }

@@ -15,14 +15,11 @@ public class UserCharacter {
 
     private String username;
 
-    private int mapID;
-
     private Location location;
 
-    public UserCharacter(int id, String username, int mapID, Location location) {
+    public UserCharacter(int id, String username, Location location) {
         this.id = id;
         this.username = username;
-        this.mapID = mapID;
         this.location = location;
     }
 }

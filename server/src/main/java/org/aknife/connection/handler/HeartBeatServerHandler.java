@@ -26,10 +26,6 @@ public class HeartBeatServerHandler extends AbstractServerHandler {
         super();
     }
 
-    public HeartBeatServerHandler(ConcurrentHashMap classMap, ApplicationContext context){
-        super(classMap, context);
-    }
-
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
         Channel channel = channelHandlerContext.channel();

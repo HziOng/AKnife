@@ -6,6 +6,8 @@ import org.aknife.business.base.controller.BaseController;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.character.service.IUserCharacterService;
 import org.aknife.business.map.controller.GameMapController;
+import org.aknife.business.map.service.GameMapServiceImpl;
+import org.aknife.business.map.service.IGameMapService;
 import org.aknife.business.user.model.User;
 import org.aknife.business.character.packet.CM_SwitchMap;
 import org.aknife.business.character.packet.SM_SwitchMap;
@@ -29,26 +31,16 @@ public class UserCharacterController extends BaseController {
 
     private IUserCharacterService userCharacterService;
 
+    private IGameMapService gameMapService;
+
+    @Autowired
+    public void setGameMapService(IGameMapService gameMapService) {
+        this.gameMapService = gameMapService;
+    }
+
     @Autowired
     public void setUserCharacterService(IUserCharacterService userCharacterService) {
         this.userCharacterService = userCharacterService;
     }
 
-    /**
-     * 用户角色切换地图协议处理
-     * @param operaUser
-     * @param request
-     * @return
-     */
-    @Operating
-    public int switchMap(User operaUser, CM_SwitchMap request){
-        try {
-            userCharacterService.switchMapAllCharacter(operaUser, request.getToMapID());
-            SM_SwitchMap response = new SM_SwitchMap(ProtocolFixedData.STATUS_OK, request.getToMapID(), "switch map successful");
-            writePacket(operaUser, response);
-        } catch (GlobalException e){
-            e.printStackTrace();
-        }
-        return ProtocolFixedData.STATUS_OK;
-    }
 }

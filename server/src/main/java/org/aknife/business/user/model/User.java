@@ -20,6 +20,11 @@ public class User implements Serializable {
     private String password;
 
     /**
+     * 用户所在地图
+     */
+    private int mapId;
+
+    /**
      * 默认使用的角色
      */
     private int characterId;

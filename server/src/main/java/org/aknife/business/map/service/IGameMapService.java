@@ -13,14 +13,6 @@ import org.aknife.business.user.model.User;
 public interface IGameMapService {
 
     /**
-     * 向toMapId的所有角色通知operaUser的到来
-     * @param operaUser 要到达toMapId的角色
-     * @param toMapId 要去的地图ID
-     */
-    void broadcastSwitchMap(User operaUser, int toMapId);
-
-
-    /**
      * 指定用户的指定角色前往指定位置
      *
      * @param operaUser
@@ -29,4 +21,21 @@ public interface IGameMapService {
      * @return
      */
     void moveLocation(User operaUser, int characterId, Location toLocation);
+
+
+    /**
+     * 当用户离开或进入地图时候通知对应地图的用户
+     * @param mapID
+     * @param toMapID
+     * @param operaUser
+     */
+    void notifyAllUserOfMap(int mapID, int toMapID, User operaUser);
+
+
+    /**
+     * 用户切换地图
+     * @param operaUser
+     * @param toMapID
+     */
+    void userSwitchMap(User operaUser, int toMapID);
 }

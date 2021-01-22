@@ -15,10 +15,9 @@ public class SM_OtherUserAwayMap extends Packet {
     /**
      * 要操作的用户名
      */
-    private int username;
+    private int userId;
 
-    /**
-     * 要操作的用户角色
-     */
-    private int characterId;
+    public SM_OtherUserAwayMap(int userId) {
+        this.userId = userId;
+    }
 }

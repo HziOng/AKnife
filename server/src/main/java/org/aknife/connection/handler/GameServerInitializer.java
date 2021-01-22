@@ -36,13 +36,9 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
      */
     private ApplicationContext ioc = null;
 
-    public GameServerInitializer() {
-        initializer = new SystemInitializer();
-    }
 
-    public GameServerInitializer(SystemInitializer systemInitializer) {
-        this.initializer = systemInitializer;
-        this.ioc = systemInitializer.getIoc();
+    public GameServerInitializer() {
+        this.ioc = SystemInitializer.getIoc();
     }
 
 
@@ -52,8 +48,8 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
 
         pipeline.addLast("decoder", new GameMessageDecoder());
         pipeline.addLast("encoder", new GameMessageEncoder());
-        pipeline.addLast("heartBeatHandler", new HeartBeatServerHandler(classMap, ioc));
-        pipeline.addLast("controlHandler", new GameServerControlHandler(initializer, classMap, ioc));
+        pipeline.addLast("heartBeatHandler", new HeartBeatServerHandler());
+        pipeline.addLast("controlHandler", new GameServerControlHandler());
 
     }
 

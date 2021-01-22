@@ -51,7 +51,6 @@ public class UserAccountServiceImpl implements IUserAccountService {
         // 新建角色
         UserCharacter character = new UserCharacter();
         character.setId(UserUtil.getCharacterId(operaUser.getUserID(),1));
-        character.setMapID(0);
         character.setUserId(operaUser.getUserID());
         character.setLocation(new Location(10,10,0));
         operaUser.setCharacterId(character.getId());

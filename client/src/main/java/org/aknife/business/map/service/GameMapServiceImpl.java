@@ -3,6 +3,7 @@ package org.aknife.business.map.service;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.map.manager.GameMapManager;
+import org.aknife.business.map.model.Location;
 import org.aknife.business.map.service.IGameMapService;
 import org.aknife.business.user.model.User;
 import org.aknife.business.map.swing.SwingGameForm;
@@ -31,7 +32,6 @@ public class GameMapServiceImpl implements IGameMapService {
         this.mapManager = mapManager;
     }
 
-    private ConcurrentHashMap<Integer, CopyOnWriteArrayList<User>> userInMap;
 
     private SwingGameForm checkSwingForm(){
         JFrame jFrame = jFrameStack.peek();
@@ -65,17 +65,27 @@ public class GameMapServiceImpl implements IGameMapService {
     }
 
     @Override
-    public void userGoAwayMap(int userId, String username) {
+    public void otherUserGoAwayMap(int userId) {
         SwingGameForm form = checkSwingForm();
-        form.addMessage("用户【" + username + "】 离开地图 "+ form.getGameMapString());
+        User other = otherUser.get(userId);
+        if (other == null){
+            throw new GlobalException("该用户不存在于本地图");
+        }
+        form.addMessage("用户【" + other.getUsername() + "】 离开地图 "+ form.getGameMapString());
         List<Integer> characterIds = otherUser.get(userId).getCharacterIds();
         otherUser.remove(userId);
-
     }
 
     @Override
-    public void userEntryMap(int userId, int username, List<Integer> characterId) {
+    public void otherUserEntryMap(User other) {
         SwingGameForm form = checkSwingForm();
-        form.addMessage("用户【" + username + "】 进入地图 "+ form.getGameMapString());
+        if (other == null){
+            throw new GlobalException("该用户不存在于本地图");
+        }
+        form.addMessage("用户【" + other.getUsername() + "】 进入地图 "+ form.getGameMapString());
+        otherUser.put(other.getUserID(), other);
+        for (Integer id : other.getCharacterIds()){
+            characters.put(id, new UserCharacter(id,other.getUsername(),new Location(10,10,0)));
+        }
     }
 }

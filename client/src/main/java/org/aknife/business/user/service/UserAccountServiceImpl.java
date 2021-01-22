@@ -22,12 +22,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public void updateUser(User now, int mapID, int characterId) {
+        user.setMapId(mapID);
         user.setUserID(now.getUserID());
+        user.setCharacterId(characterId);
         user.setUsername(now.getUsername());
         user.setCharacterIds(now.getCharacterIds());
-        user.setCharacterId(characterId);
         for (Integer id : user.getCharacterIds()){
-            UserCharacter character = new UserCharacter(id,user.getUsername(),mapID,new Location(10,10,0));
+            UserCharacter character = new UserCharacter(id,user.getUsername(),new Location(10,10,0));
             characters.put(id, character);
         }
     }

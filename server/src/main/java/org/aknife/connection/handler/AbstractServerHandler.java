@@ -2,6 +2,7 @@ package org.aknife.connection.handler;
 
 import io.netty.channel.Channel;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.aknife.connection.initializer.SystemInitializer;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.connection.link.user.UserChannelConnection;
 import org.aknife.message.model.Message;
@@ -26,11 +27,7 @@ abstract class AbstractServerHandler extends SimpleChannelInboundHandler<Message
 
     public AbstractServerHandler(){
         userChannel = UserChannelConnection.getAllUserChannel();
-    }
-
-    public AbstractServerHandler(ConcurrentHashMap classMap, ApplicationContext context){
-        this();
-        this.ioc = context;
+        this.ioc = SystemInitializer.getIoc();
     }
 
     /**

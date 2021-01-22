@@ -30,26 +30,21 @@ public class SystemInitializer {
     /**
      * 协议中独自运行的方法
      */
-    private ConcurrentHashMap<Integer, Method> protocolUniqueMap = new ConcurrentHashMap();
-    /**
-     * 协议中需要跨用户的方法
-     */
-    private ConcurrentHashMap<Integer, Method> protocolCommonMap = new ConcurrentHashMap();
-
+    private static ConcurrentHashMap<Integer, Method> protocolMap = new ConcurrentHashMap();
 
     /**
      * Spring中的IOC容器
      */
-    private ApplicationContext ioc = null;
+    private static ApplicationContext ioc = null;
 
     /**
      * 要扫描的包名
      */
-    private final String BASE_PACKAGE = "org.aknife";
-    private final String RESOURCE_PATTERN = "/**/*.class";
-    private final String APPLICATIONCONTEXTPATH = "applicationContext.xml";
+    private static final String BASE_PACKAGE = "org.aknife";
+    private static final String RESOURCE_PATTERN = "/**/*.class";
+    private static final String APPLICATION_CONTEXT_PATH = "applicationContext.xml";
 
-    public SystemInitializer() {
+    static  {
         initSpring();
         initProtocol();
     }
@@ -57,9 +52,9 @@ public class SystemInitializer {
     /**
      * 初始化Spring容器
      */
-    private void initSpring(){
+    private static void initSpring(){
         try {
-            ioc = new ClassPathXmlApplicationContext(APPLICATIONCONTEXTPATH);
+            ioc = new ClassPathXmlApplicationContext(APPLICATION_CONTEXT_PATH);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -71,7 +66,7 @@ public class SystemInitializer {
      * 初始化协议内容
      * @throws Exception
      */
-    private void initProtocol() {
+    private static void initProtocol() {
 
         //spring工具类，可以获取指定路径下的全部类
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -100,11 +95,7 @@ public class SystemInitializer {
                                 continue;
                             }
                             int packetCode = PacketFixedConsts.getCodeByClass(paramClass[1]);
-                            if ("unique".equals(methodAnnotation.type())){
-                                protocolUniqueMap.put(packetCode, method);
-                            }else {
-                                protocolCommonMap.put(packetCode, method);
-                            }
+                            protocolMap.put(packetCode, method);
                         }
                     }
                 }
@@ -116,15 +107,11 @@ public class SystemInitializer {
 
 
 
-    public ConcurrentHashMap<Integer, Method> getProtocolUniqueMap() {
-        return protocolUniqueMap;
+    public static ConcurrentHashMap<Integer, Method> getProtocolMap() {
+        return protocolMap;
     }
 
-    public ConcurrentHashMap<Integer, Method> getProtocolCommonMap() {
-        return protocolCommonMap;
-    }
-
-    public ApplicationContext getIoc() {
+    public static ApplicationContext getIoc() {
         return ioc;
     }
 

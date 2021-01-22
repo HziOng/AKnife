@@ -5,11 +5,9 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.aknife.connection.initializer.SystemInitializer;
-import org.aknife.connection.thread.CommonOperationThreadUtil;
 import org.aknife.connection.thread.PersonalThreadDistributionUtil;
 import org.aknife.message.model.Message;
 import org.aknife.business.user.model.User;
-import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,16 +28,10 @@ public class GameServerControlHandler extends AbstractServerHandler {
     /**
      * 协议中独自运行的方法
      */
-    private ConcurrentHashMap<Integer, Method> protocolUniqueMap = new ConcurrentHashMap();
-    /**
-     * 协议中需要跨用户的方法
-     */
-    private ConcurrentHashMap<Integer, Method> protocolCommonMap = new ConcurrentHashMap();
+    private ConcurrentHashMap<Integer, Method> protocolUniqueMap = null;
 
-    public GameServerControlHandler(SystemInitializer initializer, ConcurrentHashMap classMap, ApplicationContext context){
-        super(classMap, context);
-        this.protocolUniqueMap = initializer.getProtocolUniqueMap();
-        this.protocolCommonMap = initializer.getProtocolCommonMap();
+    public GameServerControlHandler(){
+        this.protocolUniqueMap = SystemInitializer.getProtocolMap();
     }
 
     @Override

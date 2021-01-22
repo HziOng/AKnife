@@ -31,7 +31,6 @@ public class CharacterManagerImplTest {
         user.setStatus(0);
         UserCharacter character = new UserCharacter();
         character.setId(UserUtil.getCharacterId(user.getUserID(),1));
-        character.setMapID(0);
         character.setLocation(new Location(10,10,0));
         user.setCharacterId(character.getId());
 

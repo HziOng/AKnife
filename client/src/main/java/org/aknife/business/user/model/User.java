@@ -20,6 +20,8 @@ public class User implements Serializable {
 
     private String password;
 
+    private int mapId;
+
     /**
      * 默认使用的角色
      */
@@ -45,5 +47,11 @@ public class User implements Serializable {
     public User(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    public User(Integer userID, String username, List<Integer> characterIds) {
+        this.userID = userID;
+        this.username = username;
+        this.characterIds = characterIds;
     }
 }

@@ -3,6 +3,7 @@ package org.aknife.business.character.manager;
 import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.user.model.User;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,4 +54,5 @@ public interface CharacterManager {
      * @param character
      */
     void addCharacter(UserCharacter character);
+
 }

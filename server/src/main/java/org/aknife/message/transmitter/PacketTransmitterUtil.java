@@ -32,14 +32,14 @@ public class PacketTransmitterUtil {
     private PacketTransmitterUtil(){
     }
 
-    public static void initTransmitter(SystemInitializer initializer){
+    public static void initTransmitter(){
         ConcurrentHashMap<Channel, User> channelUser = UserChannelConnection.getAllUserChannel();
         for (Channel channel : channelUser.keySet()){
             PacketTransmitterUtil.userChannel.put(channelUser.get(channel).getUserID(), channel);
         }
     }
 
-    public void writePacket(User user, Object o){
+    public static void writePacket(User user, Object o){
         Channel channel = userChannel.get(user.getUserID());
         if (channel == null){
             throw new GlobalException("该通道已断开");
@@ -52,7 +52,7 @@ public class PacketTransmitterUtil {
         userChannel.put(user.getUserID(),channel);
     }
 
-    public void updateUserID(int oldID, int nowID){
+    public static void updateUserID(int oldID, int nowID){
         synchronized (transmitter){
             Channel channel = userChannel.get(oldID);
             userChannel.remove(oldID);

@@ -15,17 +15,23 @@ import java.util.List;
 public class SM_OtherUserEntryMap extends Packet {
 
     /**
-     * 要操作的用户名
-     */
-    private int username;
-
-    /**
-     * 要操作的用户角色
+     * 要操作的用户ID
      */
     private int userId;
 
     /**
-     * 该用户的要进入的所有角色
+     * 进入地图用户的用户名
      */
-    private List<Integer> characterId;
+    private String username;
+
+    /**
+     * 进入地图用户所带的角色
+     */
+    private List<Integer> characterIds;
+
+    public SM_OtherUserEntryMap(int userId, String username, List<Integer> characterIds) {
+        this.userId = userId;
+        this.username = username;
+        this.characterIds = characterIds;
+    }
 }

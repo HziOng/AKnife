@@ -1,6 +1,10 @@
 package org.aknife.business.map.manager;
 
 import org.aknife.business.map.model.GameMap;
+import org.aknife.business.user.model.User;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName GameMapManager
@@ -16,4 +20,9 @@ public interface GameMapManager {
      */
     GameMap getGameMapById(int mapId);
 
+    /**
+     * 获取所有GameMap对象的id
+     * @return
+     */
+    Set<Integer> getAllGameMapId();
 }

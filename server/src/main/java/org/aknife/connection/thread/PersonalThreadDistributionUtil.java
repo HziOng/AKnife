@@ -10,11 +10,9 @@ import java.util.concurrent.*;
  */
 public class PersonalThreadDistributionUtil {
 
-    private static final int CORE_POOL_SIZE = 40;
+    private static final int CORE_POOL_SIZE = 20;
 
     private static ExecutorService[] executors = new ExecutorService[CORE_POOL_SIZE];
-
-    private static final int MAX_MUM_POOL_SIZE = 100;
 
 
     static {
