@@ -4,6 +4,7 @@ import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.character.entity.UserCharacterEntity;
 import org.aknife.business.character.manager.CharacterManager;
 import org.aknife.business.character.model.UserCharacter;
+import org.aknife.business.character.util.CharacterUtil;
 import org.aknife.business.user.entity.UserEntity;
 import org.aknife.business.user.model.User;
 import org.aknife.cache.CacheManager;
@@ -45,23 +46,22 @@ public class CharacterManagerImpl implements CharacterManager {
 
     @Override
     public ConcurrentHashMap<Integer, UserCharacter> getCharacterByUserId(int userId) {
-        ConcurrentHashMap<Integer, UserCharacter> cache = cacheManager.getCache(UserCharacterEntity.class);
         UserEntity userEntity = cacheManager.getClassObject(UserEntity.class, userId);
         ArrayList<Integer> characterIds = userEntity.getUser().getCharacterIds();
         ConcurrentHashMap<Integer, UserCharacter> result = new ConcurrentHashMap<>(5);
         for (Integer id : characterIds){
-            result.put(id, cache.get(id));
+            result.put(id, ((UserCharacterEntity) cacheManager.getClassObject(UserCharacterEntity.class, id)).getCharacter());
         }
         return result;
     }
 
     @Override
     public ConcurrentHashMap<Integer, UserCharacter> getCharacterByUserId(User user) {
-        ConcurrentHashMap<Integer, UserCharacterEntity> cache = cacheManager.getCache(UserCharacterEntity.class);
         ArrayList<Integer> characterIds = user.getCharacterIds();
         ConcurrentHashMap<Integer, UserCharacter> result = new ConcurrentHashMap<>(5);
         for (Integer id : characterIds){
-            result.put(id, cache.get(id).getCharacter());
+            UserCharacterEntity entity = cacheManager.getClassObject(UserCharacterEntity.class,id);
+            result.put(id, entity.getCharacter());
         }
         return result;
     }

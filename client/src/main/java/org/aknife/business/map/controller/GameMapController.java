@@ -6,6 +6,7 @@ import org.aknife.business.map.packet.SM_OtherUserAwayMap;
 import org.aknife.business.map.packet.SM_OtherUserEntryMap;
 import org.aknife.business.map.service.IGameMapService;
 import org.aknife.business.user.model.User;
+import org.aknife.business.user.service.UserAccountService;
 import org.aknife.connection.annotation.Operating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,13 @@ public class GameMapController extends BaseController {
 
     private IGameMapService gameMapService;
 
+    private UserAccountService userAccountService;
+
+    @Autowired
+    public void setUserAccountService(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
+    }
+
     @Autowired
     public void setGameMapService(IGameMapService gameMapService) {
         this.gameMapService = gameMapService;
@@ -34,6 +42,10 @@ public class GameMapController extends BaseController {
     public void otherUserEntryMap(SM_OtherUserEntryMap response){
         User user = new User(response.getUserId(), response.getUsername(), response.getCharacterIds());
         try {
+            if (userAccountService.getMyUser().getUserID().equals( user.getUserID())){
+                // 如果这个其他用户是自己，则抛弃该请求
+                return;
+            }
             gameMapService.otherUserEntryMap(user);
         } catch (GlobalException e){
             e.printStackTrace();

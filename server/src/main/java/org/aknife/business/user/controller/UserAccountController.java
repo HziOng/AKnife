@@ -4,6 +4,7 @@ import lombok.extern.java.Log;
 import org.aknife.business.base.controller.BaseController;
 import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.character.service.IUserCharacterService;
+import org.aknife.business.map.service.IGameMapService;
 import org.aknife.business.user.packet.*;
 import org.aknife.constant.ProtocolFixedData;
 import org.aknife.business.base.exception.GlobalException;
@@ -25,6 +26,13 @@ public class UserAccountController extends BaseController {
     private IUserAccountService userAccountService;
 
     private IUserCharacterService userCharacterService;
+
+    private IGameMapService gameMapService;
+
+    @Autowired
+    public void setGameMapService(IGameMapService gameMapService) {
+        this.gameMapService = gameMapService;
+    }
 
     @Autowired
     public void setUserCharacterService(IUserCharacterService userCharacterService) {
@@ -51,12 +59,11 @@ public class UserAccountController extends BaseController {
             operaUser.setUsername(data.getUsername());
             operaUser.setPassword(data.getPassword());
             operaUser.setMapId(0);
-            // 进行登录业务
+
+            // 业务处理
             userAccountService.login(operaUser);
             updatePacketTransmitter(interimID, operaUser.getUserID());
-            // 加载角色信息
-            UserCharacter character = userCharacterService.getInitCharacter(operaUser);
-            // 发送响应
+
             SM_UserLogin response = new SM_UserLogin(operaUser.getUserID(), operaUser.getUsername(), operaUser.getCharacterId(),
                     operaUser.getMapId(), ProtocolFixedData.STATUS_OK, operaUser.getCharacterIds(),
                     "login successful");

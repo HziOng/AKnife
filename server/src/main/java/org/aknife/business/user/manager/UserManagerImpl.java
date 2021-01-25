@@ -35,6 +35,14 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    public void login(User user) {
+        UserEntity entity = new UserEntity();
+        entity.setUser(user);
+        userAccountDao.update(entity);
+        cacheManager.addCacheIfAbsentNoUpdateToMySQL(UserEntity.class, entity.getId(), entity);
+    }
+
+    @Override
     public void updateUser(User user) {
         UserEntity userEntity = cacheManager.getClassObject(UserEntity.class, user.getUserID());
         if (userEntity == null){
@@ -43,6 +51,8 @@ public class UserManagerImpl implements UserManager {
         userEntity.setUser(user);
         cacheManager.updateCache(userEntity);
     }
+
+
 
     @Override
     public User queryUser(int id) {

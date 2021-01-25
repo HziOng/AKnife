@@ -7,15 +7,20 @@ import org.aknife.business.map.model.Location;
 import org.aknife.business.map.service.IGameMapService;
 import org.aknife.business.user.model.User;
 import org.aknife.business.map.swing.SwingGameForm;
+import org.aknife.business.user.model.UserVO;
 import org.aknife.resource.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName MapServiceImpl
@@ -42,12 +47,17 @@ public class GameMapServiceImpl implements IGameMapService {
     }
 
     @Override
-    public void switchMapAllCharacterFromUser(int toMapID) {
+    public void switchMapAllCharacterFromUser(int toMapID, List<UserVO> userVOS) {
         SwingGameForm form = checkSwingForm();
         form.setMapText(ResourceManager.getMapNameByID(toMapID));
         form.setMapImage(ResourceManager.getMapImageUrlByID(toMapID));
-        form.setLocationText(characters.get(user.getCharacterId()).getLocation().toString());
+        form.clearMessage();
 
+        userVOS.forEach(userVO -> {
+            otherUser.put(userVO.getUserID(),new User(userVO.getUserID(),userVO.getUsername(),userVO.getCharacterIds()));
+        });
+
+        form.setLocationText(characters.get(user.getCharacterId()).getLocation().toString());
         // 这里的character是用户的所有角色,mapCharacter表示该用户的所有角色
         HashMap<Integer, UserCharacter> mapCharacter = form.getCharacters();
         mapCharacter.clear();
@@ -69,18 +79,18 @@ public class GameMapServiceImpl implements IGameMapService {
         SwingGameForm form = checkSwingForm();
         User other = otherUser.get(userId);
         if (other == null){
-            throw new GlobalException("该用户不存在于本地图");
+            throw new GlobalException(userId+"该用户不存在于本地图,，无法离开地图");
         }
         form.addMessage("用户【" + other.getUsername() + "】 离开地图 "+ form.getGameMapString());
-        List<Integer> characterIds = otherUser.get(userId).getCharacterIds();
         otherUser.remove(userId);
+        form.repaint();
     }
 
     @Override
     public void otherUserEntryMap(User other) {
         SwingGameForm form = checkSwingForm();
         if (other == null){
-            throw new GlobalException("该用户不存在于本地图");
+            throw new GlobalException(other.getUsername()+"该用户不存在于本地图，无法进入地图");
         }
         form.addMessage("用户【" + other.getUsername() + "】 进入地图 "+ form.getGameMapString());
         otherUser.put(other.getUserID(), other);

@@ -3,6 +3,9 @@ package org.aknife.business.map.service;
 import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.map.model.Location;
 import org.aknife.business.user.model.User;
+import org.aknife.business.user.model.UserVO;
+
+import java.util.List;
 
 /**
  * 地图业务主要实现
@@ -38,4 +41,11 @@ public interface IGameMapService {
      * @param toMapID
      */
     void userSwitchMap(User operaUser, int toMapID);
+
+    /**
+     * 获取指定地图中的存在的用户信息，并封装为客户端显示形态
+     * @param mapID
+     * @return
+     */
+    List<UserVO> getUserVoInMap(int mapID);
 }

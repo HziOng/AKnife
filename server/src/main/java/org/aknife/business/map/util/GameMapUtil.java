@@ -1,9 +1,8 @@
 package org.aknife.business.map.util;
 
-import org.aknife.business.map.entity.GameMapEntity;
+import org.aknife.business.map.entity.GameMapResource;
 import org.aknife.business.map.model.GameMap;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -15,15 +14,15 @@ public class GameMapUtil {
 
     /**
      * 将数据库实体对象转化为model对象
-     * @param entity
+     * @param resource
      * @return
      */
-    public static GameMap entityToGameMap(GameMapEntity entity){
+    public static GameMap resourceToGameMap(GameMapResource resource){
         GameMap map = new GameMap();
-        map.setId(entity.getId());
-        map.setName(entity.getName());
-        map.setNumberLimit(entity.getNumberLimit());
-        map.setNpcId(Arrays.asList(entity.getNpcIds().split(",")).stream().mapToInt(Integer::parseInt).toArray());
+        map.setId(resource.getId());
+        map.setName(resource.getName());
+        map.setNumberLimit(resource.getNumberLimit());
+        map.setNpcId(Arrays.asList(resource.getNpcIds().split(",")).stream().mapToInt(Integer::parseInt).toArray());
         return map;
     }
 }

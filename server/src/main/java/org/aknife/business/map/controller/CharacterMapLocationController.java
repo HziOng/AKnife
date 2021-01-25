@@ -9,10 +9,13 @@ import org.aknife.business.map.packet.CM_MoveLocation;
 import org.aknife.business.map.packet.SM_MoveLocation;
 import org.aknife.business.map.service.IGameMapService;
 import org.aknife.business.user.model.User;
+import org.aknife.business.user.model.UserVO;
 import org.aknife.connection.annotation.Operating;
 import org.aknife.constant.ProtocolFixedData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 /**
  * 角色位置控制
@@ -60,7 +63,8 @@ public class CharacterMapLocationController extends BaseController {
         try {
             gameMapService.userSwitchMap(operaUser, request.getToMapID());
             gameMapService.notifyAllUserOfMap(request.getMapID(), request.getToMapID(), operaUser);
-            SM_SwitchMap response = new SM_SwitchMap(ProtocolFixedData.STATUS_OK, request.getToMapID(), "switch map successful");
+            List<UserVO> userVOS = gameMapService.getUserVoInMap(request.getToMapID());
+            SM_SwitchMap response = new SM_SwitchMap(ProtocolFixedData.STATUS_OK, request.getToMapID(), "switch map successful",userVOS);
             writePacket(operaUser, response);
         } catch (GlobalException e){
             e.printStackTrace();

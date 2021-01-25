@@ -91,4 +91,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         return characters.get(user.getCharacterId());
     }
+
+    @Override
+    public User getMyUser() {
+        return user;
+    }
 }

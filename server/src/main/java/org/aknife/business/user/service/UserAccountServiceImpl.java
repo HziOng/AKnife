@@ -76,9 +76,9 @@ public class UserAccountServiceImpl implements IUserAccountService {
         if (!now.getPassword().equals(operaUser.getPassword())) {
             throw new GlobalException("用户密码错误");
         }
-        now.setStatus(UserStatusConsts.ON_LINE);
+//        now.setStatus(UserStatusConsts.ON_LINE);
         UserUtil.userCopyToUser(now, operaUser);
-        userManager.updateUser(now);
+        userManager.login(now);
         return ProtocolFixedData.STATUS_OK;
     }
 

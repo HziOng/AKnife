@@ -16,6 +16,12 @@ import java.util.HashMap;
 @Service
 public interface UserAccountService extends BaseService {
 
+    /**
+     * 更新用户信息
+     * @param user
+     * @param mapID
+     * @param characterId
+     */
     void updateUser(User user, int mapID, int characterId);
 
     /**
@@ -53,4 +59,10 @@ public interface UserAccountService extends BaseService {
      * @return
      */
     UserCharacter getInitCharacter();
+
+    /**
+     * 获取客户端自生User对象
+     * @return
+     */
+    User getMyUser();
 }

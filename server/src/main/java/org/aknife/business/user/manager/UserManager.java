@@ -10,6 +10,12 @@ import org.aknife.business.user.model.User;
 public interface UserManager {
 
     /**
+     * 由于注册方法时候缓存的特殊性，特意写了该方法
+     * @param user
+     */
+    void login(User user);
+
+    /**
      * 更新用户信息
      * @param user
      * @return

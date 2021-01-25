@@ -31,13 +31,11 @@ class CacheManagerTest {
     @Test
     void refreshData() {
         UserEntity now = manager.getClassObject(UserEntity.class, 210115561);
-        System.out.println(now);
         now.setUserName("14");
         now.getUser().setUsername("14");
         manager.refreshData(now);
 
         now = manager.getClassObject(UserEntity.class, 210115561);
-        System.out.println(now);
 
         System.out.println();
     }

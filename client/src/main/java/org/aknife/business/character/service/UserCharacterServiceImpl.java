@@ -19,6 +19,7 @@ public class UserCharacterServiceImpl implements UserCharacterService {
         SwingGameForm form = new SwingGameForm();
         form.setUser(user);
         form.setUserText(character.getUsername());
+        form.setMessage("");
 
         form.repaint();
         jFrameStack.push(form);

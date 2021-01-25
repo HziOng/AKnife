@@ -3,6 +3,9 @@ package org.aknife.business.character.packet;
 
 import lombok.Data;
 import org.aknife.business.base.packet.Packet;
+import org.aknife.business.user.model.UserVO;
+
+import java.util.List;
 
 /**
  * 用户地图切换响应
@@ -27,4 +30,9 @@ public class SM_SwitchMap extends Packet {
      * 响应结果信息
      */
     private String message;
+
+    /**
+     * 要去的地图中已经存在的用户
+     */
+    private List<UserVO> userVOS;
 }

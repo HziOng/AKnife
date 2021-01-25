@@ -1,7 +1,11 @@
 package org.aknife.business.character.packet;
 
+
 import lombok.Data;
 import org.aknife.business.base.packet.Packet;
+import org.aknife.business.user.model.UserVO;
+
+import java.util.List;
 
 /**
  * 用户地图切换响应
@@ -27,16 +31,15 @@ public class SM_SwitchMap extends Packet {
      */
     private String message;
 
-    public SM_SwitchMap() {
-    }
+    /**
+     * 要去的地图中已经存在的用户
+     */
+    private List<UserVO> userVOS;
 
-    public SM_SwitchMap(String message) {
-        this.message = message;
-    }
-
-    public SM_SwitchMap(int status, int toMapId, String message) {
+    public SM_SwitchMap(int status, int toMapId, String message, List<UserVO> userVOS) {
         this.status = status;
         this.toMapId = toMapId;
         this.message = message;
+        this.userVOS = userVOS;
     }
 }

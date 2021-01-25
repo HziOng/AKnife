@@ -1,13 +1,16 @@
 package org.aknife.cache;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.PriorityQueue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 缓存管理器
@@ -18,7 +21,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Repository
 public class CacheManager {
 
-    private ConcurrentHashMap<Class, ConcurrentHashMap<? extends Serializable, ?>> cache = new ConcurrentHashMap<>();
+    private static final int SURVIVAL_TIME = 10 * 60 * 1000;
+
+    private ConcurrentHashMap<Class, ConcurrentHashMap<? extends Serializable, Node>> cache = new ConcurrentHashMap<>();
+
+    private ReentrantLock lock = new ReentrantLock();
 
     /**
      * 要更新的数据队列
@@ -30,9 +37,23 @@ public class CacheManager {
      */
     private ConcurrentLinkedQueue<Object> addQueue = new ConcurrentLinkedQueue<>();
 
+    /**
+     * 这里让过期时间最小的数据排在队列前面
+     */
+    private PriorityQueue<Node> expireQueue = new PriorityQueue<>(1024);
+
     private CacheDao cacheDao ;
 
+    // 定时任务
+    /**
+     * 更新数据
+     */
     private TimerManager timerManager;
+
+    /**
+     * 过期删除任务
+     */
+    private ExpiredNodeManager expiredManager;
 
     @Autowired
     public void setCacheDao(CacheDao cacheDao) {
@@ -41,6 +62,7 @@ public class CacheManager {
 
     public CacheManager(){
         timerManager = new TimerManager(this);
+        expiredManager = new ExpiredNodeManager(this);
     }
 
     /**
@@ -48,11 +70,12 @@ public class CacheManager {
      * @param clazz
      * @return
      */
-    public <K extends Serializable,V> ConcurrentHashMap<K, V> getCache(Class clazz){
+    private  <K extends Serializable,V> ConcurrentHashMap<K, Node> getCache(Class clazz){
         if (!cache.containsKey(clazz)){
-            cache.put(clazz, new ConcurrentHashMap<>());
+            cache.putIfAbsent(clazz, new ConcurrentHashMap<>());
         }
-        return (ConcurrentHashMap<K, V>) cache.get(clazz);
+//        cache.computeIfAbsent()
+        return (ConcurrentHashMap<K, Node>) cache.get(clazz);
     }
 
     /**
@@ -66,6 +89,16 @@ public class CacheManager {
     }
 
     /**
+     * 立刻将该数据更新到数据库中
+     * @param value
+     * @param <K>
+     * @param <V>
+     */
+    public <K extends Serializable,V> void updateCacheNow(V value){
+
+    }
+
+    /**
      * 向缓存中添加数据，并准备更新到数据库中
      * @param clazz
      * @param key
@@ -74,12 +107,19 @@ public class CacheManager {
      * @param <V>
      */
     public <K extends Serializable,V> void addCacheIfAbsent(Class clazz, K key, V value){
-        getCache(clazz).putIfAbsent(key,value);
-        addQueue.add(value);
+        lock.lock();
+        try {
+            Node now = new Node(key,value,System.currentTimeMillis());
+            getCache(clazz).putIfAbsent(key,now);
+            expireQueue.add(now);
+            addQueue.add(value);
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
-     * 向缓存中添加数据，但是不更新到数据库中
+     * 向缓存中添加数据，但是不更新到数据库中,这个一般是其他业务中直接访问数据库获取数据后，手动添加到缓存中
      * @param clazz
      * @param key
      * @param value
@@ -87,7 +127,14 @@ public class CacheManager {
      * @param <V>
      */
     public <K extends Serializable,V> void addCacheIfAbsentNoUpdateToMySQL(Class clazz, K key, V value){
-        getCache(clazz).putIfAbsent(key,value);
+        lock.lock();
+        try {
+            Node now = new Node(key,value,System.currentTimeMillis());
+            getCache(clazz).putIfAbsent(key,now);
+            expireQueue.add(now);
+        } finally {
+            lock.unlock();
+        }
     }
     /**
      * 根据model类型、属性ID查询缓存数据
@@ -98,16 +145,24 @@ public class CacheManager {
      * @return
      */
     public <K extends Serializable,V> V getClassObject(Class clazz, K key){
-        ConcurrentHashMap<K,V> classCache = getCache(clazz);
-        V value =  classCache.get(key);
-        if (value == null){
-            value = cacheDao.load(clazz, key);
+
+        try {
+            ConcurrentHashMap<K,Node> classCache = getCache(clazz);
+            lock.lock();
+            Node now = classCache.get(key);
+            V value = now == null ? null : (V)now.value;
             if (value == null){
-                return null;
+                value = cacheDao.load(clazz, key);
+                if (value == null){
+                    return null;
+                }
+                classCache.put(key, new Node(key, value, System.currentTimeMillis()));
             }
-            classCache.put(key, value);
+            lock.unlock();
+            return value;
+        } finally {
+            lock.unlock();
         }
-        return value;
     }
 
     /**
@@ -155,7 +210,7 @@ public class CacheManager {
         return (V) getCache(clazz).remove(key);
     }
 
-    class TimerManager{
+    private class TimerManager{
         private static final long PERIOD_DAY = 1000;  //每隔六十秒执行一次
         public TimerManager(CacheManager manager) {
             Timer timer = new Timer();
@@ -165,6 +220,65 @@ public class CacheManager {
                     manager.synchronizeData();
                 }
             }, PERIOD_DAY, PERIOD_DAY);
+        }
+    }
+
+    private class ExpiredNodeManager {
+
+        private static final long PERIOD_DAY = 1000;
+
+        public ExpiredNodeManager(CacheManager manager) {
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+
+                @Override
+                public void run() {
+                    long now = System.currentTimeMillis();
+                    while (true) {
+                        manager.lock.lock();
+                        try {
+                            Node node = manager.expireQueue.peek();
+                            //没有数据了，或者数据都是没有过期的了
+                            if (node == null || node.expireTime > now) {
+                                return;
+                            }
+                            manager.getCache(node.getValue().getClass()).remove(node.key);
+                            manager.expireQueue.poll();
+
+                        } finally {
+                            lock.unlock();
+                        }
+                    }
+                }
+            }, PERIOD_DAY, PERIOD_DAY);
+        }
+    }
+
+    @Data
+    private static class Node<K,V> implements Comparable<Node>{
+
+        private K key;
+
+        private V value;
+
+        private long expireTime;
+
+        public Node(K key, V value, long expireTime) {
+            this.key = key;
+            this.value = value;
+            this.expireTime = expireTime;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            long r = this.expireTime - o.expireTime;
+            if (r > 0) {
+                return 1;
+            }
+            if (r < 0) {
+                return -1;
+            }
+            return 0;
         }
     }
 }

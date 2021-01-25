@@ -73,7 +73,6 @@ public class CacheDaoImpl implements CacheDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
             for (Object value : values){
-                System.out.println(value);
                 session.update(value);
             }
             session.getTransaction().commit();
@@ -92,7 +91,6 @@ public class CacheDaoImpl implements CacheDao {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
             for (Object value : values){
-                System.out.println(value);
                 session.save(value);
             }
             session.getTransaction().commit();

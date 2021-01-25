@@ -58,7 +58,7 @@ public class SwingGameForm extends JFrame{
      */
     private JLabel messageLabel = new JLabel("");
 
-    private String message;
+    private StringBuffer message = new StringBuffer();
 
     // 用户信息
 
@@ -129,14 +129,13 @@ public class SwingGameForm extends JFrame{
          * 操作按钮
          */
         JButton switchMapButton = new JButton("去恶人谷");
-        switchMapButton.setBounds(135, 110, 200, 40);
+        switchMapButton.setBounds(100, 110, 200, 40);
         switchMapButton.addActionListener(new ActionListener() {
             private CM_SwitchMap packet = new CM_SwitchMap(0,1);
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
                 PacketTransmitter.writePacket(packet);
-
             }
         });
         panel.add(switchMapButton);
@@ -145,15 +144,12 @@ public class SwingGameForm extends JFrame{
          * 操作按钮
          */
         JButton moveButton = new JButton("移动到铁匠处");
-        moveButton.setBounds(135, 140, 200, 40);
+        moveButton.setBounds(100, 140, 200, 40);
         moveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
                 toLocation = new Location(25,25,0);
-                System.out.println(characters);
-                System.out.println(user.getCharacterId());
-                System.out.println(characters.get(user.getCharacterId()));
                 CM_MoveLocation packet = new CM_MoveLocation(user.getCharacterId(), characters.get(user.getCharacterId()).getLocation(), toLocation);
                 PacketTransmitter.writePacket(packet);
             }
@@ -166,7 +162,10 @@ public class SwingGameForm extends JFrame{
         errorLabel.setBounds(50,140,300,25);
         panel.add(errorLabel);
 
-        messageLabel.setBounds(300, 20, 400, 300);
+        /**
+         * 显示用户信息
+         */
+        messageLabel.setBounds(400, -100, 400, 300);
         panel.add(messageLabel);
 
         /**
@@ -218,16 +217,40 @@ public class SwingGameForm extends JFrame{
     }
 
     public void setMessage(String message){
-        this.message = message;
-        messageLabel.setText(message);
+        this.message.append(message);
+        messageLabel.setText("<html>"+message);
     }
 
+    /**
+     * 向信息栏添加其他用户信息
+     * @param msg
+     */
     public void addMessage(String msg){
-        message += "\r\n"+msg;
-        messageLabel.setText(message);
+        message .append(msg + "<br/>");
+        messageLabel.setText("<html>"+message);
     }
 
+    /**
+     * 当用户离开当前地图，删除有关该地图的其他用户信息
+     */
+    public void clearMessage() {
+        message.setLength(0);
+        messageLabel.setText(message.toString());
+    }
+
+    /**
+     * 检查数据格式
+     * @return
+     */
     public boolean checkInputDateFormat(){
         return false;
     }
+
+    public static void main(String[] args) {
+        SwingGameForm form = new SwingGameForm();
+        form.setMessage("");
+        form.addMessage("123");
+    }
+
+
 }

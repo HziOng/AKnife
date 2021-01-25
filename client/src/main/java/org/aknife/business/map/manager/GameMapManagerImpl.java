@@ -44,6 +44,5 @@ public class GameMapManagerImpl implements GameMapManager {
 
     public static void main(String[] args) {
         GameMapManager mapManager = new GameMapManagerImpl();
-        System.out.println(mapManager.getGameMapById(0));
     }
 }

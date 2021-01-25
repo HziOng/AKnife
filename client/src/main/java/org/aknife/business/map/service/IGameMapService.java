@@ -2,6 +2,7 @@ package org.aknife.business.map.service;
 
 import org.aknife.business.base.service.BaseService;
 import org.aknife.business.user.model.User;
+import org.aknife.business.user.model.UserVO;
 
 import java.util.List;
 
@@ -16,8 +17,9 @@ public interface IGameMapService extends BaseService {
     /**
      * 将用户user的所有角色都送到toMapID地图去
      * @param toMapID
+     * @param userVOS
      */
-    void switchMapAllCharacterFromUser(int toMapID);
+    void switchMapAllCharacterFromUser(int toMapID, List<UserVO> userVOS);
 
     /**
      * 切换地图失败的信息回显

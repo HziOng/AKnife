@@ -1,5 +1,7 @@
 package org.aknife.connection.thread;
 
+import org.aknife.business.base.exception.GlobalException;
+
 import java.util.HashMap;
 import java.util.concurrent.*;
 
@@ -27,7 +29,11 @@ public class CommonOperationThreadUtil {
     }
 
     public static void runTask(int id, Runnable task){
+        if (id < 0 || id >= CORE_POOL_SIZE){
+//            throw new GlobalException("线程池异常，接收id无法映射到线程池"+ id);
+            return;
+        }
         ExecutorService executor = executors[id % CORE_POOL_SIZE];
-        executor.execute(task);
+        executor.submit(task);
     }
 }

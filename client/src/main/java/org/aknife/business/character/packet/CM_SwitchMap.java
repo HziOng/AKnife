@@ -1,7 +1,8 @@
 package org.aknife.business.character.packet;
 
 import lombok.Data;
-import org.aknife.resource.model.Location;
+import org.aknife.business.base.packet.Packet;
+
 
 /**
  * 用户角色地图切换请求协议
@@ -10,7 +11,7 @@ import org.aknife.resource.model.Location;
  * @Data 2021/1/18 17:12
  */
 @Data
-public class CM_SwitchMap {
+public class CM_SwitchMap extends Packet {
 
     /**
      * 用户所处的地图ID

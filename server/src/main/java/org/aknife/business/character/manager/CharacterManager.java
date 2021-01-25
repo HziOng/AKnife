@@ -5,6 +5,7 @@ import org.aknife.business.user.model.User;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 用户角色操作业务接口

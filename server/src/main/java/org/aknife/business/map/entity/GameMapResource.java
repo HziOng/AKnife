@@ -3,6 +3,7 @@ package org.aknife.business.map.entity;
 import lombok.Data;
 import org.aknife.business.map.model.GameMap;
 import org.aknife.resource.annotation.ExcelCell;
+import org.aknife.resource.model.IResource;
 import org.aknife.resource.model.NpcCharacter;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
  * @Data 2021/1/20 15:18
  */
 @Data
-public class GameMapEntity {
+public class GameMapResource implements IResource {
 
     /**
      * 地图id
@@ -41,6 +42,5 @@ public class GameMapEntity {
      */
     @ExcelCell(col = 3)
     private String npcIds;
-
 
 }

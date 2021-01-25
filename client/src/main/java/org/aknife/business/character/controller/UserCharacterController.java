@@ -38,7 +38,7 @@ public class UserCharacterController extends BaseController {
     @Operating
     public void switchMap(SM_SwitchMap response){
         if (response.getStatus() == ProtocolFixedData.STATUS_OK) {
-            gameMapService.switchMapAllCharacterFromUser(response.getToMapId());
+            gameMapService.switchMapAllCharacterFromUser(response.getToMapId(), response.getUserVOS());
         }else {
             gameMapService.switchMapFailure(response.getMessage());
         }
