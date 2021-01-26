@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -23,9 +26,9 @@ public class CacheManager {
 
     private static final int SURVIVAL_TIME = 10 * 60 * 1000;
 
-    private ConcurrentHashMap<Class, ConcurrentHashMap<? extends Serializable, Node>> cache = new ConcurrentHashMap<>();
+    private HashMap<Class, HashMap<? extends Serializable, Node>> cache = new HashMap<>();
 
-    private ReentrantLock lock = new ReentrantLock();
+    private HashMap<Class, ReentrantLock> locks = new HashMap<>();
 
     /**
      * 要更新的数据队列
@@ -40,7 +43,7 @@ public class CacheManager {
     /**
      * 这里让过期时间最小的数据排在队列前面
      */
-    private PriorityQueue<Node> expireQueue = new PriorityQueue<>(1024);
+    private HashMap<Class, PriorityQueue<Node>> expireQueue = new HashMap<>();
 
     private CacheDao cacheDao ;
 
@@ -70,12 +73,14 @@ public class CacheManager {
      * @param clazz
      * @return
      */
-    private  <K extends Serializable,V> ConcurrentHashMap<K, Node> getCache(Class clazz){
+    private  <K extends Serializable,V> HashMap<K, Node> getCache(Class clazz){
         if (!cache.containsKey(clazz)){
-            cache.putIfAbsent(clazz, new ConcurrentHashMap<>());
+            cache.putIfAbsent(clazz, new HashMap<>());
+            locks.put(clazz, new ReentrantLock());
+            expireQueue.put(clazz, new PriorityQueue());
         }
 //        cache.computeIfAbsent()
-        return (ConcurrentHashMap<K, Node>) cache.get(clazz);
+        return (HashMap<K, Node>) cache.get(clazz);
     }
 
     /**
@@ -107,14 +112,16 @@ public class CacheManager {
      * @param <V>
      */
     public <K extends Serializable,V> void addCacheIfAbsent(Class clazz, K key, V value){
-        lock.lock();
+        Node now = new Node(key,value,System.currentTimeMillis()+SURVIVAL_TIME
+        );
+        HashMap<K,Node> map = getCache(clazz);
+        locks.get(clazz).lock();
         try {
-            Node now = new Node(key,value,System.currentTimeMillis());
-            getCache(clazz).putIfAbsent(key,now);
-            expireQueue.add(now);
+            map.putIfAbsent(key,now);
+            expireQueue.get(clazz).add(now);
             addQueue.add(value);
         } finally {
-            lock.unlock();
+            locks.get(clazz).unlock();
         }
     }
 
@@ -127,14 +134,10 @@ public class CacheManager {
      * @param <V>
      */
     public <K extends Serializable,V> void addCacheIfAbsentNoUpdateToMySQL(Class clazz, K key, V value){
-        lock.lock();
-        try {
-            Node now = new Node(key,value,System.currentTimeMillis());
-            getCache(clazz).putIfAbsent(key,now);
-            expireQueue.add(now);
-        } finally {
-            lock.unlock();
-        }
+        Node now = new Node(key,value,System.currentTimeMillis()+SURVIVAL_TIME);
+        HashMap<K,Node> map = getCache(clazz);
+        map.putIfAbsent(key,now);
+        expireQueue.get(clazz).add(now);
     }
     /**
      * 根据model类型、属性ID查询缓存数据
@@ -145,23 +148,20 @@ public class CacheManager {
      * @return
      */
     public <K extends Serializable,V> V getClassObject(Class clazz, K key){
-
-        try {
-            ConcurrentHashMap<K,Node> classCache = getCache(clazz);
-            lock.lock();
+        HashMap<K,Node> classCache = getCache(clazz);
+        synchronized (clazz) {
             Node now = classCache.get(key);
-            V value = now == null ? null : (V)now.value;
-            if (value == null){
+            V value = now == null ? null : (V) now.value;
+            if (value == null) {
                 value = cacheDao.load(clazz, key);
-                if (value == null){
+                if (value == null) {
                     return null;
                 }
-                classCache.put(key, new Node(key, value, System.currentTimeMillis()));
+                classCache.put(key, new Node(key, value, System.currentTimeMillis() + SURVIVAL_TIME));
+            } else {
+                now.expireTime = System.currentTimeMillis() + SURVIVAL_TIME;
             }
-            lock.unlock();
             return value;
-        } finally {
-            lock.unlock();
         }
     }
 
@@ -234,19 +234,17 @@ public class CacheManager {
                 @Override
                 public void run() {
                     long now = System.currentTimeMillis();
-                    while (true) {
-                        manager.lock.lock();
-                        try {
-                            Node node = manager.expireQueue.peek();
+                    for (Class clazz : expireQueue.keySet()) {
+                        while (true) {
+                            manager.locks.get(clazz).lock();
+                            Node node = manager.expireQueue.get(clazz).peek();
                             //没有数据了，或者数据都是没有过期的了
                             if (node == null || node.expireTime > now) {
-                                return;
+                                break;
                             }
                             manager.getCache(node.getValue().getClass()).remove(node.key);
-                            manager.expireQueue.poll();
-
-                        } finally {
-                            lock.unlock();
+                            manager.expireQueue.get(clazz).poll();
+                            manager.locks.get(clazz).lock();
                         }
                     }
                 }

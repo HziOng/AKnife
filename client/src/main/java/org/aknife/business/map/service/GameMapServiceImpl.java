@@ -55,6 +55,9 @@ public class GameMapServiceImpl implements IGameMapService {
 
         userVOS.forEach(userVO -> {
             otherUser.put(userVO.getUserID(),new User(userVO.getUserID(),userVO.getUsername(),userVO.getCharacterIds()));
+            userVO.getCharacterIds().stream().forEach(id -> {
+                characters.put(id, new UserCharacter(id, userVO.getUsername(), new Location(10,10,0)));
+            });
         });
 
         form.setLocationText(characters.get(user.getCharacterId()).getLocation().toString());

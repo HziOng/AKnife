@@ -33,4 +33,13 @@ public class GameMap {
      */
     private int[] npcId;
 
+    public GameMap() {
+    }
+
+    public GameMap(int id, String name, int numberLimit, int[] npcId) {
+        this.id = id;
+        this.name = name;
+        this.numberLimit = numberLimit;
+        this.npcId = npcId;
+    }
 }

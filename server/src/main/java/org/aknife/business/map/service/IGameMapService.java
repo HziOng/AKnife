@@ -48,4 +48,13 @@ public interface IGameMapService {
      * @return
      */
     List<UserVO> getUserVoInMap(int mapID);
+
+    /**
+     * 某个用户中角色ID为characterID的角色从fromLocation到toLocation位置去，将这个消息发送给该地图中的所有人
+     * @param operaUser
+     * @param characterId
+     * @param fromLocation
+     * @param toLocation
+     */
+    void notifyAllUserOfLocation(User operaUser, int characterId, Location fromLocation, Location toLocation);
 }

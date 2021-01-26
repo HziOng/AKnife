@@ -2,11 +2,10 @@ package org.aknife.dao.mysql.user;
 
 import lombok.extern.log4j.Log4j;
 import org.aknife.business.user.entity.UserEntity;
-import org.aknife.dao.mysql.user.IUserAccountDao;
-import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,17 +19,12 @@ import java.util.List;
 @Log4j
 public class UserAccountDaoImpl extends IUserAccountDao {
 
-
-    private HibernateTemplate hibernateTemplate;
-
-    @Resource
-    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-        this.hibernateTemplate = hibernateTemplate;
-    }
-
     @Override
     public UserEntity findByUserName(String username){
-        List<UserEntity> list = (List<UserEntity>) hibernateTemplate.find("from UserEntity user where user.userName = ? ", username);
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from UserEntity user where user.userName = ? ");
+        query.setString(0, username);
+        List<UserEntity> list = (List<UserEntity>)query.list();
         if (list == null || list.size() == 0){
             return null;
         }

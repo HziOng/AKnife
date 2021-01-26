@@ -2,6 +2,7 @@ package org.aknife.resource.util;
 
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.resource.annotation.ExcelCell;
+import org.aknife.resource.model.IResource;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -162,7 +163,7 @@ public class ExcelUtil {
         }
     }
 
-    public static <K extends Serializable,V> HashMap<K, V> getBeanMappingID(String path, Class clazz){
+    public static <K extends Serializable,V extends IResource> HashMap<K, V> getBeanMappingID(String path, Class clazz){
         HashMap<K, V> map = new HashMap<>();
         Workbook book = readFile(path);
         for (int i = 1; i <= book.getSheetAt(0).getLastRowNum(); i++) {
@@ -176,6 +177,7 @@ public class ExcelUtil {
             } else {
 
             }
+            value.init();
         }
         return map;
     }

@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 @Log4j
 public abstract class HibernateRealizationDao<T> implements BaseMySqlDao{
 
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
     @Resource
     public void setSessionFactory(SessionFactory sessionFactory) {

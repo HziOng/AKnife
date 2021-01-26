@@ -2,6 +2,7 @@ package org.aknife.business.map.controller;
 
 import org.aknife.business.base.controller.BaseController;
 import org.aknife.business.map.packet.SM_MoveLocation;
+import org.aknife.business.map.packet.SM_OtherMoveLocation;
 import org.aknife.business.map.service.ICharacterLocationService;
 import org.aknife.connection.annotation.Operating;
 import org.aknife.constant.ProtocolFixedData;
@@ -30,5 +31,10 @@ public class CharacterLocationController extends BaseController {
         }else {
             locationService.movePlaceFailure(response.getMessage());
         }
+    }
+
+    @Operating
+    public void otherMoveLocation(SM_OtherMoveLocation response){
+        locationService.otherMoveLocation(response.getCharacterId(), response.getToLocation());
     }
 }

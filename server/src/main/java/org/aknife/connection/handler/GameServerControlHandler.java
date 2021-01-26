@@ -47,6 +47,7 @@ public class GameServerControlHandler extends AbstractServerHandler {
                 @Override
                 public void run() {
                     // 协议分发功能
+                    log.info("Thread:"+Thread.currentThread().getName());
                     Method operaMethod = protocolUniqueMap.get(message.getType());
                     Object operaObject = ioc.getBean(operaMethod.getDeclaringClass());
                     operaMethod.invoke(operaObject, nowUser, message.getData());

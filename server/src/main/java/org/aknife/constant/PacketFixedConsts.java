@@ -4,10 +4,7 @@ package org.aknife.constant;
 import org.aknife.business.character.packet.CM_SwitchMap;
 import org.aknife.business.character.packet.SM_SwitchMap;
 
-import org.aknife.business.map.packet.SM_MoveLocation;
-import org.aknife.business.map.packet.SM_OtherUserAwayMap;
-import org.aknife.business.map.packet.SM_OtherUserEntryMap;
-import org.aknife.business.map.packet.CM_MoveLocation;
+import org.aknife.business.map.packet.*;
 import org.aknife.business.user.packet.*;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -98,7 +95,12 @@ public class PacketFixedConsts {
         /**
          * 其他用户离开地图之后通知其他用户的客户端
          */
-        SM_OTHER_USER_AWAY_MAP(504,SM_OtherUserAwayMap.class);
+        SM_OTHER_USER_AWAY_MAP(504,SM_OtherUserAwayMap.class),
+
+        /**
+         * 其他用户移动之后通知其他客户端
+         */
+        SM_OTHER_MOVE_LOCATION(505,SM_OtherMoveLocation .class);
 
 
 

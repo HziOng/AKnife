@@ -44,6 +44,7 @@ public class CharacterMapLocationController extends BaseController {
     public void movePlace(User operaUser, CM_MoveLocation request){
         try {
             gameMapService.moveLocation(operaUser,request.getCharacterId(), request.getToLocation());
+            gameMapService.notifyAllUserOfLocation(operaUser, request.getCharacterId(), request.getFromLocation(), request.getToLocation());
         } catch (GlobalException e){
             e.printStackTrace();
         }

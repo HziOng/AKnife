@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * 用户游戏界面客户端
@@ -131,7 +132,7 @@ public class SwingGameForm extends JFrame{
         JButton switchMapButton = new JButton("去恶人谷");
         switchMapButton.setBounds(100, 110, 200, 40);
         switchMapButton.addActionListener(new ActionListener() {
-            private CM_SwitchMap packet = new CM_SwitchMap(0,1);
+            private CM_SwitchMap packet = new CM_SwitchMap(1,2);
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
@@ -165,7 +166,7 @@ public class SwingGameForm extends JFrame{
         /**
          * 显示用户信息
          */
-        messageLabel.setBounds(400, -100, 400, 300);
+        messageLabel.setBounds(400, -100, 600, 300);
         panel.add(messageLabel);
 
         /**

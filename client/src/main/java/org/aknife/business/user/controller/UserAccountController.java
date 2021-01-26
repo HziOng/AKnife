@@ -58,8 +58,7 @@ public class UserAccountController extends BaseController {
             userAccountService.updateUser(now, response.getMapID(), response.getCharacterId());
             userAccountService.closeLoginSwing();
             userCharacterService.toCharacterInfo(userAccountService.getInitCharacter());
-//            gameMapService.switchMapAllCharacterFromUser(response.getMapID());
-            PacketTransmitter.writePacket(new CM_SwitchMap(-1,0));
+            PacketTransmitter.writePacket(new CM_SwitchMap(0,1));
         }else {
             userAccountService.loginFailure(response.getUsername(), response.getNews());
         }

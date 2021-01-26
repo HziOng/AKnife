@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @ClassName User
@@ -42,5 +43,22 @@ public class User implements Serializable {
     public User(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return getMapId() == user.getMapId() && getCharacterId() == user.getCharacterId() && getStatus() == user.getStatus() && Objects.equals(getUserID(), user.getUserID()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getCharacterIds(), user.getCharacterIds());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(userID);
     }
 }

@@ -59,6 +59,10 @@ public class GameMapController extends BaseController {
     @Operating
     public void otherUserAwayMap(SM_OtherUserAwayMap response){
         try {
+            if (userAccountService.getMyUser().getUserID().equals(response.getUserId())){
+                // 如果这个其他用户是自己，则抛弃该请求
+                return;
+            }
             gameMapService.otherUserGoAwayMap(response.getUserId());
         } catch (GlobalException e){
             e.printStackTrace();

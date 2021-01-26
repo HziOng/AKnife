@@ -1,9 +1,10 @@
 package org.aknife.business.map.manager;
 
+import org.aknife.business.map.annotation.InjectResource;
 import org.aknife.business.map.entity.GameMapResource;
 import org.aknife.business.map.model.GameMap;
 import org.aknife.business.map.util.GameMapUtil;
-import org.aknife.resource.util.ExcelUtil;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -19,18 +20,8 @@ public class GameMapManagerImpl implements GameMapManager {
 
     private final static String MAP_RESOURCE_PATH = "xlsx/map.xlsx";
 
+    @InjectResource(path = MAP_RESOURCE_PATH)
     private HashMap<Integer, GameMapResource> mapResources = null;
-
-    public GameMapManagerImpl(){
-        loadMapResource();
-    }
-
-    /**
-     * 加载配置文件中的地图配置
-     */
-    public void loadMapResource(){
-        mapResources = ExcelUtil.getBeanMappingID(MAP_RESOURCE_PATH, GameMapResource.class);
-    }
 
     @Override
     public GameMap getGameMapById(int mapId) {
@@ -44,10 +35,5 @@ public class GameMapManagerImpl implements GameMapManager {
     @Override
     public Set<Integer> getAllGameMapId() {
         return mapResources.keySet();
-    }
-
-    public static void main(String[] args) {
-        GameMapManager mapManager = new GameMapManagerImpl();
-        System.out.println(mapManager.getGameMapById(0));
     }
 }

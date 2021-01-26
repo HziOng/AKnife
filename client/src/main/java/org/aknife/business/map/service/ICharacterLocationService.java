@@ -1,6 +1,7 @@
 package org.aknife.business.map.service;
 
 import org.aknife.business.base.service.BaseService;
+import org.aknife.business.map.model.Location;
 
 /**
  * @ClassName CharacterLocationService
@@ -10,7 +11,7 @@ import org.aknife.business.base.service.BaseService;
 public interface ICharacterLocationService extends BaseService {
 
     /**
-     *
+     * 本用户移动成功，进行显示
      */
     void moveLocation();
 
@@ -20,4 +21,11 @@ public interface ICharacterLocationService extends BaseService {
      * @param message
      */
     void movePlaceFailure(String message);
+
+    /**
+     * characterId角色移动到toLocation位置
+     * @param characterId
+     * @param toLocation
+     */
+    void otherMoveLocation(int characterId, Location toLocation);
 }

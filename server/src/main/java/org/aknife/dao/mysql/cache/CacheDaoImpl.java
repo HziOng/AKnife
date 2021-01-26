@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j;
 import org.aknife.cache.CacheDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -19,18 +18,11 @@ import java.io.Serializable;
 @Log4j
 public class CacheDaoImpl implements CacheDao {
 
-    private HibernateTemplate hibernateTemplate;
-
     private SessionFactory sessionFactory;
 
     @Resource
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }
-
-    @Resource
-    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-        this.hibernateTemplate = hibernateTemplate;
     }
 
     @Override

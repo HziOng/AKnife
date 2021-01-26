@@ -38,9 +38,8 @@
             </list>
         </property>
     </bean>
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
-        <property name="sessionFactory"  ref="sessionFactory"/>
-    </bean>
+
+    <bean id="resourceProcessor" class="org.aknife.connection.processor.ResourcePostProcessor"></bean>
 
     <!-- 事务管理器 -->
     <bean id="transactionManager"

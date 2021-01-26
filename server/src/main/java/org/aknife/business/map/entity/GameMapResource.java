@@ -7,6 +7,7 @@ import org.aknife.resource.model.IResource;
 import org.aknife.resource.model.NpcCharacter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,4 +44,14 @@ public class GameMapResource implements IResource {
     @ExcelCell(col = 3)
     private String npcIds;
 
+    /**
+     * 对业务中游戏实体的映射
+     */
+    private GameMap gameMap;
+
+    @Override
+    public void init() {
+        int[] npcId = Arrays.asList(npcIds.split(",")).stream().mapToInt(Integer::parseInt).toArray();
+        gameMap = new GameMap(id, name, numberLimit, npcId);
+    }
 }
