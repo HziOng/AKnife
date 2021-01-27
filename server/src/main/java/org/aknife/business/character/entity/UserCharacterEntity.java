@@ -20,26 +20,49 @@ import java.util.Date;
 @Lazy(value = false)
 public class UserCharacterEntity {
 
-    @Id
     private int id;
 
-    @Column(name = "hero_id", length = 15)
     private int heroId;
 
-    @Column(name = "user_id", length = 15)
     private int userId;
 
-    @Column(name = "data", length = 255)
     private String data;
 
-    @Column(name = "create_time", columnDefinition="DATE")
     private Date createTime;
 
-    @Column(name = "update_time", columnDefinition="DATE")
     private Date updateTime;
 
-    @Transient
     private UserCharacter character;
+
+    @Id
+    public int getId() {
+        return id;
+    }
+
+    @Column(name = "hero_id", length = 15)
+    public int getHeroId() {
+        return heroId;
+    }
+
+    @Column(name = "user_id", length = 15)
+    public int getUserId() {
+        return userId;
+    }
+
+    @Column(name = "data", length = 255)
+    public String getData() {
+        return data;
+    }
+
+    @Column(name = "create_time", columnDefinition="DATE")
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Column(name = "update_time", columnDefinition="DATE")
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
     public void setCharacter(UserCharacter character) {
         this.id = character.getId();
@@ -48,6 +71,7 @@ public class UserCharacterEntity {
         this.character = character;
     }
 
+    @Transient
     public UserCharacter getCharacter() {
         if (character == null){
             character = JSON.parseObject(data, UserCharacter.class);

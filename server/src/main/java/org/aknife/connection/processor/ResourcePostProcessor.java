@@ -21,8 +21,8 @@ public class ResourcePostProcessor implements BeanPostProcessor {
         try {
             Field[] hideFields = bean.getClass().getDeclaredFields();
             for (Field field : hideFields){
-                field.setAccessible(true);
                 if(field.isAnnotationPresent(InjectResource.class)){
+                    field.setAccessible(true);
                     String path = field.getAnnotation(InjectResource.class).path();
                     if (Map.class.isAssignableFrom(field.getType())){
                         Type t = field.getGenericType();
@@ -43,6 +43,6 @@ public class ResourcePostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return null;
+        return bean;
     }
 }

@@ -2,7 +2,7 @@ package org.aknife.business.user.swing;
 
 import io.netty.channel.Channel;
 import org.aknife.business.user.packet.CM_UserRegister;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -100,7 +100,7 @@ public class SwingRegisterForm extends JFrame{
                 CM_UserRegister packet = new CM_UserRegister(userText.getText(),
                         new String(passwordText.getPassword()),
                         new String(confirmPasswordText.getPassword()));
-                PacketTransmitter.writePacket(packet);
+                PacketTransmitterUtil.writePacket(packet);
             }
         });
         panel.add(registerButton);

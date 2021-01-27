@@ -50,9 +50,14 @@ public class PacketFixedConsts {
         CM_USER_CLOSE_CONNECTION(111, CM_UserOffLine.class),
 
         /**
-         * 心跳协议
+         * 客户端发送给服务端的心跳协议
          */
         CM_USER_HEART(000, CM_UserHeart.class),
+
+        /**
+         * 服务端发送给客户端的心跳协议
+         */
+        SM_USER_HEART(001, SM_UserHeart.class),
 
         /**
          * 用户登录响应

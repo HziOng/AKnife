@@ -56,6 +56,11 @@ public class PacketFixedConsts {
         CM_USER_HEART(000, CM_UserHeart.class),
 
         /**
+         * 服务端发送给客户端的心跳协议
+         */
+        SM_USER_HEART(001, SM_UserHeart.class),
+
+        /**
          * 用户登录响应
          */
         SM_USER_LOGIN(334, SM_UserLogin.class),

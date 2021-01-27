@@ -78,6 +78,7 @@ public class UserAccountServiceImpl implements IUserAccountService {
         }
 //        now.setStatus(UserStatusConsts.ON_LINE);
         UserUtil.userCopyToUser(now, operaUser);
+        System.out.println(now);
         userManager.login(now);
         return ProtocolFixedData.STATUS_OK;
     }

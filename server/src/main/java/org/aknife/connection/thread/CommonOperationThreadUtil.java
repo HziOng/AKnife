@@ -28,6 +28,11 @@ public class CommonOperationThreadUtil {
         }
     }
 
+    /**
+     * 无返回值的线程任务运行方法
+     * @param id
+     * @param task
+     */
     public static void runTask(int id, Runnable task){
         if (id < 0 || id >= CORE_POOL_SIZE){
 //            throw new GlobalException("线程池异常，接收id无法映射到线程池"+ id);
@@ -35,5 +40,20 @@ public class CommonOperationThreadUtil {
         }
         ExecutorService executor = executors[id % CORE_POOL_SIZE];
         executor.submit(task);
+    }
+
+    /**
+     * 有返回值的线程运行方法
+     * @param id
+     * @param task
+     * @return
+     */
+    public static Future runTask(int id, Callable task){
+        if (id < 0 || id >= CORE_POOL_SIZE){
+//            throw new GlobalException("线程池异常，接收id无法映射到线程池"+ id);
+            return null;
+        }
+        ExecutorService executor = executors[id % CORE_POOL_SIZE];
+        return executor.submit(task);
     }
 }

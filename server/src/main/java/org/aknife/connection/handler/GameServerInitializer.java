@@ -3,6 +3,7 @@ package org.aknife.connection.handler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.java.Log;
 import org.aknife.connection.initializer.SystemInitializer;
 import org.aknife.message.codec.GameMessageDecoder;
@@ -11,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 通道初始化器
@@ -46,8 +48,10 @@ public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
 
+        pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
         pipeline.addLast("decoder", new GameMessageDecoder());
         pipeline.addLast("encoder", new GameMessageEncoder());
+        pipeline.addLast("accessHandler", new AccessControlHandler());
         pipeline.addLast("heartBeatHandler", new HeartBeatServerHandler());
         pipeline.addLast("controlHandler", new GameServerControlHandler());
 

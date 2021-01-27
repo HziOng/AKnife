@@ -7,7 +7,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.aknife.connection.handler.AbstractClientHandler;
 import org.aknife.connection.handler.GameClientInitializer;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 
 /**
  * 游戏Java版客户端
@@ -42,7 +42,7 @@ public class GameClient {
                     .handler(new GameClientInitializer());
 
             Channel channel = bootstrap.connect(host, port).sync().channel();
-            PacketTransmitter.initTransmitter(channel);
+            PacketTransmitterUtil.initTransmitter(channel);
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();

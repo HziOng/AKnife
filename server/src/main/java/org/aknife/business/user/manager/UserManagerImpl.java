@@ -1,7 +1,6 @@
 package org.aknife.business.user.manager;
 
 import org.aknife.business.base.exception.GlobalException;
-import org.aknife.business.user.manager.UserManager;
 import org.aknife.business.user.model.User;
 import org.aknife.business.user.entity.UserEntity;
 import org.aknife.cache.CacheManager;
@@ -37,6 +36,8 @@ public class UserManagerImpl implements UserManager {
     @Override
     public void login(User user) {
         UserEntity entity = new UserEntity();
+        entity.setId(user.getUserID());
+        entity.setUserName(user.getUsername());
         entity.setUser(user);
         userAccountDao.update(entity);
         cacheManager.addCacheIfAbsentNoUpdateToMySQL(UserEntity.class, entity.getId(), entity);
@@ -48,11 +49,11 @@ public class UserManagerImpl implements UserManager {
         if (userEntity == null){
             throw new GlobalException("系统中不存在"+user.getUserID()+"的用户");
         }
+        userEntity.setId(user.getUserID());
+        userEntity.setUserName(user.getUsername());
         userEntity.setUser(user);
         cacheManager.updateCache(userEntity);
     }
-
-
 
     @Override
     public User queryUser(int id) {
@@ -69,7 +70,6 @@ public class UserManagerImpl implements UserManager {
         if (userEntity == null){
             return null;
         }
-        cacheManager.addCacheIfAbsentNoUpdateToMySQL(UserEntity.class,userEntity.getId(),userEntity);
         return userEntity.getUser();
     }
 
@@ -79,6 +79,8 @@ public class UserManagerImpl implements UserManager {
             return;
         }
         UserEntity userEntity = new UserEntity();
+        userEntity.setId(user.getUserID());
+        userEntity.setUserName(user.getUsername());
         userEntity.setUser(user);
         userEntity.setCreateTime(new Date());
         userEntity.setUpdateTime(new Date());

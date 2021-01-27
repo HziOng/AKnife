@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import org.aknife.business.base.service.BaseService;
 import org.aknife.business.user.model.User;
 import org.aknife.business.user.packet.CM_UserLogin;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -108,7 +108,7 @@ public class SwingLoginForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
                 CM_UserLogin packet = new CM_UserLogin(userText.getText(),new String(passwordText.getPassword()));
-                PacketTransmitter.writePacket(packet);
+                PacketTransmitterUtil.writePacket(packet);
             }
         });
         panel.add(loginButton);

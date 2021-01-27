@@ -1,6 +1,5 @@
 package org.aknife.business.map.service;
 
-import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.map.model.Location;
 import org.aknife.business.user.model.User;
 import org.aknife.business.user.model.UserVO;
@@ -57,4 +56,11 @@ public interface IGameMapService {
      * @param toLocation
      */
     void notifyAllUserOfLocation(User operaUser, int characterId, Location fromLocation, Location toLocation);
+
+    /**
+     * 发送本地图所有用户信息给某用户
+     * @param operaUser
+     * @param mapId
+     */
+    void sendUserVoInfoInMap(User operaUser, int mapId);
 }

@@ -16,8 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BaseController {
 
-    private PacketTransmitterUtil transmitter = PacketTransmitterUtil.getInstance();;
-
     public int getClassCode(Class clazz){
         return PacketFixedConsts.getCodeByClass(clazz);
     }
@@ -32,7 +30,7 @@ public class BaseController {
      * @param nowID
      */
     public void updatePacketTransmitter(int oldID, int nowID){
-        transmitter.updateUserID(oldID,nowID);
+        PacketTransmitterUtil.updateUserID(oldID,nowID);
     }
 
 

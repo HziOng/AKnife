@@ -21,14 +21,10 @@ abstract class AbstractServerHandler extends SimpleChannelInboundHandler<Message
 
 
 
-    ConcurrentHashMap<Channel, User> userChannel = null;
+    static ConcurrentHashMap<Channel, User> userChannel = UserChannelConnection.getAllUserChannel();;
 
-    ApplicationContext ioc = null;
+    static ApplicationContext ioc = SystemInitializer.getIoc();
 
-    public AbstractServerHandler(){
-        userChannel = UserChannelConnection.getAllUserChannel();
-        this.ioc = SystemInitializer.getIoc();
-    }
 
     /**
      * 返回指定协议对象对应的编号

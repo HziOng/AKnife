@@ -28,8 +28,6 @@ public class CacheManager {
 
     private HashMap<Class, HashMap<? extends Serializable, Node>> cache = new HashMap<>();
 
-    private HashMap<Class, ReentrantLock> locks = new HashMap<>();
-
     /**
      * 要更新的数据队列
      */
@@ -76,7 +74,6 @@ public class CacheManager {
     private  <K extends Serializable,V> HashMap<K, Node> getCache(Class clazz){
         if (!cache.containsKey(clazz)){
             cache.putIfAbsent(clazz, new HashMap<>());
-            locks.put(clazz, new ReentrantLock());
             expireQueue.put(clazz, new PriorityQueue());
         }
 //        cache.computeIfAbsent()
@@ -115,13 +112,10 @@ public class CacheManager {
         Node now = new Node(key,value,System.currentTimeMillis()+SURVIVAL_TIME
         );
         HashMap<K,Node> map = getCache(clazz);
-        locks.get(clazz).lock();
-        try {
+        synchronized (clazz){
             map.putIfAbsent(key,now);
             expireQueue.get(clazz).add(now);
             addQueue.add(value);
-        } finally {
-            locks.get(clazz).unlock();
         }
     }
 
@@ -236,15 +230,15 @@ public class CacheManager {
                     long now = System.currentTimeMillis();
                     for (Class clazz : expireQueue.keySet()) {
                         while (true) {
-                            manager.locks.get(clazz).lock();
-                            Node node = manager.expireQueue.get(clazz).peek();
-                            //没有数据了，或者数据都是没有过期的了
-                            if (node == null || node.expireTime > now) {
-                                break;
+                            synchronized (clazz) {
+                                Node node = manager.expireQueue.get(clazz).peek();
+                                //没有数据了，或者数据都是没有过期的了
+                                if (node == null || node.expireTime > now) {
+                                    break;
+                                }
+                                manager.getCache(node.getValue().getClass()).remove(node.key);
+                                manager.expireQueue.get(clazz).poll();
                             }
-                            manager.getCache(node.getValue().getClass()).remove(node.key);
-                            manager.expireQueue.get(clazz).poll();
-                            manager.locks.get(clazz).lock();
                         }
                     }
                 }

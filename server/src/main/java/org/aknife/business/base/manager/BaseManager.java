@@ -9,11 +9,4 @@ import javax.annotation.PostConstruct;
  */
 public interface BaseManager {
 
-    /**
-     * 所有BaseManager的初始化方法
-     */
-    @PostConstruct
-    default void initMethod(){
-
-    }
 }

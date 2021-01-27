@@ -5,17 +5,14 @@ import org.aknife.business.character.packet.CM_SwitchMap;
 import org.aknife.business.map.model.Location;
 import org.aknife.business.map.packet.CM_MoveLocation;
 import org.aknife.business.user.model.User;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * 用户游戏界面客户端
@@ -136,7 +133,7 @@ public class SwingGameForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkInputDateFormat();
-                PacketTransmitter.writePacket(packet);
+                PacketTransmitterUtil.writePacket(packet);
             }
         });
         panel.add(switchMapButton);
@@ -152,7 +149,7 @@ public class SwingGameForm extends JFrame{
                 checkInputDateFormat();
                 toLocation = new Location(25,25,0);
                 CM_MoveLocation packet = new CM_MoveLocation(user.getCharacterId(), characters.get(user.getCharacterId()).getLocation(), toLocation);
-                PacketTransmitter.writePacket(packet);
+                PacketTransmitterUtil.writePacket(packet);
             }
         });
         panel.add(moveButton);

@@ -1,16 +1,12 @@
 package org.aknife.message.transmitter;
 
 import io.netty.channel.Channel;
-import org.aknife.SystemInitializer;
+import io.netty.channel.ChannelFutureListener;
 import org.aknife.business.base.exception.GlobalException;
-import org.aknife.business.user.model.User;
 import org.aknife.constant.PacketFixedConsts;
-import org.aknife.constant.ProtocolFixedData;
 import org.aknife.message.model.Message;
 
-import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 协议发送器，服务端controller层发送协议给客户端的工具
@@ -18,18 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author HeZiLong
  * @Data 2021/1/15 14:48
  */
-public class PacketTransmitter {
+public class PacketTransmitterUtil {
 
-    private static PacketTransmitter transmitter = new PacketTransmitter();
+    private static PacketTransmitterUtil transmitter = new PacketTransmitterUtil();
 
-    public static PacketTransmitter getInstance(){
+    public static PacketTransmitterUtil getInstance(){
         return transmitter;
     }
 
     private static Channel channel;
 
 
-    private PacketTransmitter(){
+    private PacketTransmitterUtil(){
     }
 
     public static void initTransmitter(Channel nowChannel){
@@ -42,5 +38,17 @@ public class PacketTransmitter {
         }
         Message message = new Message(PacketFixedConsts.getCodeByClass(o.getClass()), new Date(), o);
         channel.writeAndFlush(message);
+    }
+
+    /**
+     * 向指定用户发送协议信息，并接受返回信息，如果没有则断开连接
+     * @param o
+     */
+    public static void writePacketAndCloseIfNoResponse(Object o){
+        if (channel == null){
+            throw new GlobalException("该通道已断开");
+        }
+        Message message = new Message(PacketFixedConsts.getCodeByClass(o.getClass()), new Date(), o);
+        channel.writeAndFlush(message).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
     }
 }

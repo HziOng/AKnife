@@ -64,9 +64,7 @@ public class CharacterMapLocationController extends BaseController {
         try {
             gameMapService.userSwitchMap(operaUser, request.getToMapID());
             gameMapService.notifyAllUserOfMap(request.getMapID(), request.getToMapID(), operaUser);
-            List<UserVO> userVOS = gameMapService.getUserVoInMap(request.getToMapID());
-            SM_SwitchMap response = new SM_SwitchMap(ProtocolFixedData.STATUS_OK, request.getToMapID(), "switch map successful",userVOS);
-            writePacket(operaUser, response);
+            gameMapService.sendUserVoInfoInMap(operaUser, request.getToMapID());
         } catch (GlobalException e){
             e.printStackTrace();
         }

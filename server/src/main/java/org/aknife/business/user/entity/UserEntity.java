@@ -20,42 +20,77 @@ import java.util.Date;
 @Lazy(value = false)
 public class UserEntity implements Serializable {
 
-    @Id
     private int id;
 
-    @Column(name = "user_name", length = 50)
     private String userName;
 
+    private String userData;
+
+    private User user;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    @Id
+    public int getId() {
+        return id;
+    }
+
+    @Column(name = "user_name", length = 50)
+    public String getUserName() {
+        return userName;
+    }
+
     @Column(name = "user_data", length = 255)
-    private String data;
+    public String getUserData() {
+        userData = JSON.toJSONString(user);
+        return userData;
+    }
 
     @Transient
-    private User user;
+    public User getUser() {
+        if (user == null){
+            user = JSON.parseObject(userData, User.class);
+        }
+        return user;
+    }
 
     @Column(name = "create_time", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
-    private Date createTime;
+    public Date getCreateTime() {
+        return createTime;
+    }
+
 
     @Column(name = "update_time", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
-    private Date updateTime;
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-        getUser().setUsername(userName);
+
+    public void setUserData(String data) {
+        user = JSON.parseObject(data, User.class);
+        this.userData = data;
     }
 
     public void setUser(User user) {
         this.user = user;
         id = user.getUserID();
-        data = JSON.toJSONString(user);
         userName = user.getUsername();
     }
 
-    public User getUser() {
-        if (user == null){
-            user = JSON.parseObject(data, User.class);
-        }
-        return user;
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", user_data='" + userData + '\'' +
+                ", user=" + user +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

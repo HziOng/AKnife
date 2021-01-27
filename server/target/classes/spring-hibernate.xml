@@ -39,7 +39,7 @@
         </property>
     </bean>
 
-    <bean class="org.aknife.connection.processor.PostProcessor"></bean>
+    <bean id="resourceProcessor" class="org.aknife.connection.processor.ResourcePostProcessor"></bean>
 
     <!-- 事务管理器 -->
     <bean id="transactionManager"

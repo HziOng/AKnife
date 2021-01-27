@@ -2,7 +2,6 @@ package org.aknife.business.user.controller;
 
 import lombok.extern.log4j.Log4j;
 import org.aknife.business.base.controller.BaseController;
-import org.aknife.business.character.model.UserCharacter;
 import org.aknife.business.character.packet.CM_SwitchMap;
 import org.aknife.business.character.service.UserCharacterService;
 import org.aknife.business.map.service.IGameMapService;
@@ -12,7 +11,7 @@ import org.aknife.business.user.packet.SM_UserRegister;
 import org.aknife.business.user.service.UserAccountService;
 import org.aknife.constant.ProtocolFixedData;
 import org.aknife.connection.annotation.Operating;
-import org.aknife.message.transmitter.PacketTransmitter;
+import org.aknife.message.transmitter.PacketTransmitterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -58,7 +57,7 @@ public class UserAccountController extends BaseController {
             userAccountService.updateUser(now, response.getMapID(), response.getCharacterId());
             userAccountService.closeLoginSwing();
             userCharacterService.toCharacterInfo(userAccountService.getInitCharacter());
-            PacketTransmitter.writePacket(new CM_SwitchMap(0,1));
+            PacketTransmitterUtil.writePacket(new CM_SwitchMap(0,1));
         }else {
             userAccountService.loginFailure(response.getUsername(), response.getNews());
         }

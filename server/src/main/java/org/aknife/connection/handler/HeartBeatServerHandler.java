@@ -1,14 +1,16 @@
 package org.aknife.connection.handler;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.ReadTimeoutException;
+import lombok.extern.java.Log;
+import org.aknife.business.user.packet.*;
 import org.aknife.business.user.util.UserUtil;
 import org.aknife.message.model.Message;
 import org.aknife.business.user.model.User;
-import org.aknife.business.user.packet.CM_UserLogin;
-import org.aknife.business.user.packet.CM_UserOffLine;
-import org.aknife.business.user.packet.CM_UserRegister;
 import org.aknife.message.transmitter.PacketTransmitterUtil;
 import org.springframework.context.ApplicationContext;
 
@@ -16,10 +18,12 @@ import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 服务端心跳检测
  * @ClassName HeartBeatHandler
  * @Author HeZiLong
  * @Data 2021/1/13 15:53
  */
+@Log
 public class HeartBeatServerHandler extends AbstractServerHandler {
 
     public HeartBeatServerHandler(){
@@ -30,37 +34,41 @@ public class HeartBeatServerHandler extends AbstractServerHandler {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
         Channel channel = channelHandlerContext.channel();
         User nowUser = userChannel.get(channel);
-        // user-channel映射处理
-        if(nowUser == null){
-            // 如果发送的协议不是登录，注册，同时后台还没有该用户数据，让用户进行重新登录
-            if(message.getType() != getClassCode(CM_UserLogin.class) &&
-                    message.getType() != getClassCode(CM_UserRegister.class)){
-                // 这里发送重连协议
-            }
-            nowUser = new User("未登录用户", "未确定密码");
-            // 如果用户还不存在，先生成临时ID
-            nowUser.setUserID(UserUtil.getUUID());
-            userChannel.put(channel, nowUser);
-            PacketTransmitterUtil.userNoticePacketTransmitter(channel, nowUser);
-        }
-        if (message.getType() == getClassCode(CM_UserOffLine.class)){
-            userChannel.remove(channel);
+        if (message.getData() instanceof CM_UserHeart){
+            log.info(channel.remoteAddress() + "===>server: " + nowUser.getUserID() + " is connected");
+            PacketTransmitterUtil.writePacket(nowUser, new SM_UserHeart());
+            return;
         }
         channelHandlerContext.fireChannelRead(message);
     }
 
+    /**
+     * 如果5s没有读请求，则向客户端发送心跳
+     * @param ctx
+     * @param evt
+     * @throws Exception
+     */
     @Override
-    public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable cause) throws Exception {
-        super.exceptionCaught(channelHandlerContext, cause);
-        Channel channel = channelHandlerContext.channel();
-        // 如果接受到ReadTimeoutHandler的ReadTimeoutException，说明客户端10s没有进行操作,同时也没有心跳，用户下线
-        if (cause instanceof ReadTimeoutException) {
-            userChannel.remove(channel);
-            Message message = new Message();
-            message.setType(getClassCode(CM_UserOffLine.class));
-            message.setDate(new Date());
-            message.setData(new CM_UserOffLine());
-            channelHandlerContext.fireChannelRead(message);
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            Channel channel = ctx.channel();
+            User nowUser = userChannel.get(channel);
+            IdleStateEvent event = (IdleStateEvent) evt;
+            if (IdleState.READER_IDLE.equals((event.state()))) {
+                PacketTransmitterUtil.writePacketAndCloseIfNoResponse(nowUser, new SM_UserHeart());
+            }
         }
+        super.userEventTriggered(ctx, evt);
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        log.info("client channelActive: "+userChannel.get(ctx.channel()).getUserID());
+        ctx.fireChannelActive();
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("Client is close: "+userChannel.get(ctx.channel()).getUserID());
     }
 }

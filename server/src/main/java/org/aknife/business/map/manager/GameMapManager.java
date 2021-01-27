@@ -4,6 +4,7 @@ import org.aknife.business.base.manager.BaseManager;
 import org.aknife.business.map.model.GameMap;
 import org.aknife.business.user.model.User;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,5 +27,12 @@ public interface GameMapManager extends BaseManager {
      * @return
      */
     Set<Integer> getAllGameMapId();
+
+    /**
+     * 获取指定id的地图中所有用户
+     * @param mapId
+     * @return
+     */
+    HashSet<User> getUserInMap(int mapId);
 
 }

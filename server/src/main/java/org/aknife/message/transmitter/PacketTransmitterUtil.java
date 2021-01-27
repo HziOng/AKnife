@@ -1,6 +1,7 @@
 package org.aknife.message.transmitter;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import org.aknife.connection.initializer.SystemInitializer;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.user.model.User;
@@ -39,6 +40,11 @@ public class PacketTransmitterUtil {
         }
     }
 
+    /**
+     * 向指定用户发送协议信息
+     * @param user
+     * @param o
+     */
     public static void writePacket(User user, Object o){
         Channel channel = userChannel.get(user.getUserID());
         if (channel == null){
@@ -46,6 +52,20 @@ public class PacketTransmitterUtil {
         }
         Message message = new Message(PacketFixedConsts.getCodeByClass(o.getClass()), new Date(), o);
         channel.writeAndFlush(message);
+    }
+
+    /**
+     * 向指定用户发送协议信息，并接受返回信息，如果没有则断开连接
+     * @param user
+     * @param o
+     */
+    public static void writePacketAndCloseIfNoResponse(User user, Object o){
+        Channel channel = userChannel.get(user.getUserID());
+        if (channel == null){
+            throw new GlobalException("该通道已断开");
+        }
+        Message message = new Message(PacketFixedConsts.getCodeByClass(o.getClass()), new Date(), o);
+        channel.writeAndFlush(message).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
     }
 
     public static void userNoticePacketTransmitter(Channel channel, User user){
