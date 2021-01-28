@@ -14,7 +14,6 @@ public class PersonalThreadDistributionUtil {
 
     private static ExecutorService[] executors = new ExecutorService[CORE_POOL_SIZE];
 
-
     static {
         for (int i=0;i<executors.length;i++){
             executors[i] = Executors.newSingleThreadExecutor();
@@ -23,11 +22,11 @@ public class PersonalThreadDistributionUtil {
 
     /**
      * 给指定userID用户的绑定线程执行线程
-     * @param userID
+     * @param id
      * @param task
      */
-    public static void runTask(Integer userID, Runnable task) {
-        int threadIndex = userID % CORE_POOL_SIZE;
+    public static void runTask(Integer id, Runnable task) {
+        int threadIndex = id % CORE_POOL_SIZE;
         executors[threadIndex].execute(task);
     }
 }

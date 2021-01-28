@@ -2,6 +2,7 @@ package org.aknife.message.transmitter;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
+import org.aknife.business.base.packet.Packet;
 import org.aknife.connection.initializer.SystemInitializer;
 import org.aknife.business.base.exception.GlobalException;
 import org.aknife.business.user.model.User;
@@ -45,7 +46,7 @@ public class PacketTransmitterUtil {
      * @param user
      * @param o
      */
-    public static void writePacket(User user, Object o){
+    public static void writePacket(User user, Packet o){
         Channel channel = userChannel.get(user.getUserID());
         if (channel == null){
             throw new GlobalException("该通道已断开");
@@ -59,7 +60,7 @@ public class PacketTransmitterUtil {
      * @param user
      * @param o
      */
-    public static void writePacketAndCloseIfNoResponse(User user, Object o){
+    public static void writePacketAndCloseIfNoResponse(User user, Packet o){
         Channel channel = userChannel.get(user.getUserID());
         if (channel == null){
             throw new GlobalException("该通道已断开");

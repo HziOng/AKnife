@@ -2,6 +2,7 @@ package org.aknife.message.model;
 
 import io.netty.channel.Channel;
 import lombok.Data;
+import org.aknife.business.base.packet.Packet;
 import org.aknife.business.user.model.User;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Data 2021/1/11 9:56
  */
 @Data
-public class Message<T> {
+public class Message {
 
     /**
      * 消息类型
@@ -33,11 +34,11 @@ public class Message<T> {
     /**
      * 消息主体数据
      */
-    private T data;
+    private Packet data;
 
     public Message(){}
 
-    public Message(int type, Date date, T data) {
+    public Message(int type, Date date, Packet data) {
         this.type = type;
         this.date = date;
         this.data = data;

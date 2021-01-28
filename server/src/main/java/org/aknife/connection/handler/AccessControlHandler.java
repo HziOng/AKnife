@@ -25,7 +25,7 @@ public class AccessControlHandler extends AbstractServerHandler{
             // 如果发送的协议不是登录，注册，同时后台还没有该用户数据，让用户进行重新登录
             if(message.getType() != getClassCode(CM_UserLogin.class) &&
                     message.getType() != getClassCode(CM_UserRegister.class)){
-                // 这里发送重连协议
+                    // 这里发送重连协议
             }
             nowUser = new User("未登录用户", "未确定密码");
             // 如果用户还不存在，先生成临时ID

@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.java.Log;
+import org.aknife.business.base.packet.Packet;
 import org.aknife.constant.PacketFixedConsts;
 import org.aknife.message.model.Message;
 import org.aknife.constant.ProtocolFixedData;
@@ -40,7 +41,7 @@ public class GameMessageDecoder extends ByteToMessageDecoder {
 
             byte[] temp = new byte[message.getSize()];
             in.readBytes(temp);
-            Object data = JSON.parseObject(new String(temp),packetClass);
+            Packet data = (Packet) JSON.parseObject(new String(temp),packetClass);
             message.setData(data);
             out.add(message);
         }
